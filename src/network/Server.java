@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class Server {
 
-	private int port = 5555;
+	private int port;
 	private ServerSocket server = null;
 	private boolean isRunning = true;
 	
@@ -16,22 +16,22 @@ public class Server {
 			server = new ServerSocket(port);
 		} catch (IOException e) {
 			e.printStackTrace();
+			server = null;
 		}
 	}
 	
 	public void open() {
-
-		// Toujours dans un thread à part vu qu'il est dans une boucle infinie
+		if (server == null) {
+			return;
+		}
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				System.out.println("Server started on port " + port);
 				while (isRunning == true) {
 
 					try {
-						// On attend une connexion d'un client
 						Socket client = server.accept();
 
-						// Une fois reçue, on la traite dans un thread séparé
 						System.out.println("Connexion cliente reçue.");
 						Thread t = new Thread(new ClientProcessor(client));
 						t.start();
