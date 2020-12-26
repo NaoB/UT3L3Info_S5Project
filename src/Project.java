@@ -7,5 +7,5 @@ public class Project {
 		Server server = new Server(8952);
 		server.open();
 	}
-	// TEST
+	//TEST
 }
