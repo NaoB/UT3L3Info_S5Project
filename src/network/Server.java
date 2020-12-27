@@ -32,7 +32,7 @@ public class Server {
 					try {
 						Socket client = server.accept();
 
-						System.out.println("Connexion cliente reÃ§ue.");
+						System.out.println("Connexion cliente reçue.");
 						Thread t = new Thread(new ClientProcessor(client));
 						t.start();
 
