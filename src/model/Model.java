@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 abstract class Model {
 	
-	private boolean exists = false;
+	protected boolean exists = false;
 	
 	protected abstract String getInsertSQL();
 	protected abstract String getUpdateSQL();
@@ -15,11 +15,16 @@ abstract class Model {
 	public void save() {		
 		Connection connect = Database.getInstance().getConnection();
 		try (Statement stmt = connect.createStatement()) {
+			String query;
 			if (!exists) {
-				stmt.executeUpdate(this.getInsertSQL());
+				query = this.getInsertSQL();
+				stmt.executeUpdate(query);
+				System.out.println("SQL : " + query);
 				exists = true;
 			} else if (this.getUpdateSQL() != null){
-				stmt.executeUpdate(this.getUpdateSQL());
+				query = this.getUpdateSQL();
+				stmt.executeUpdate(query);
+				System.out.println("SQL : " + query);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -27,6 +32,7 @@ abstract class Model {
 	}
 	
 	protected static ResultSet select(String query) {
+		System.out.println("SQL : " + query);
 		ResultSet result = null;
 		Connection connect = Database.getInstance().getConnection();
 		Statement stmt;

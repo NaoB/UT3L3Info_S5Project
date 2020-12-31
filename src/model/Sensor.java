@@ -50,6 +50,7 @@ public class Sensor extends Model {
 		s.setMax(max);
 		s.setConnected(connected);
 		s.setValue(value);
+		s.exists = true;
 		return s;
 	}
 	
@@ -144,14 +145,14 @@ public class Sensor extends Model {
 
 	@Override
 	protected String getInsertSQL() {
-		return String.format("INSERT INTO %s (name, sensor_type, building, floor, location, min, max) VALUES ('%s', '%s', '%s', %d, '%s', %f, %f)",
-				tableName, name, sensorType.name, building.name, floor, location, min, max);
+		return String.format("INSERT INTO %s (name, sensor_type, building, floor, location, connected, min, max) VALUES ('%s', '%s', '%s', %d, '%s', %d, %f, %f)",
+				tableName, name, sensorType.name, building.name, floor, location, connected ? 1 : 0, min, max);
 	}
 
 	@Override
 	protected String getUpdateSQL() {
-		return String.format("UPDATE %s SET sensor_type = '%s', building = '%s', floor = %d, location = '%s', value = %f, min = %f, max = %f WHERE %s = %d",
-				tableName, sensorType.name, building.name, floor, location, min, max, value, primaryKey, name);
+		return String.format("UPDATE %s SET sensor_type = '%s', building = '%s', floor = %d, location = '%s', connected = %d, value = %f, min = %f, max = %f WHERE %s = '%s'",
+				tableName, sensorType.name, building.name, floor, location, connected ? 1 : 0, value, min, max, primaryKey, name);
 	}
 	
 	@Override
