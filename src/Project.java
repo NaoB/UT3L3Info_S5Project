@@ -77,12 +77,19 @@ public class Project extends JFrame {
 		
 		// CHART
 		List<Data> list = new ArrayList<>();
+		List<Sensor> sensors = new ArrayList<>();
 		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
-		Building bat1 = new Building("Batiment 1");
-		Sensor sensor = new Sensor("S1", EAU, bat1, 1, "Salle201");
-		Chart chart = new Chart(sensor,new Date(), new Date(),list);
-		chart.show(sensor, new Date(),  new Date(), list, frame);
 		
+		Building bat1 = new Building("Batiment 1");
+		Sensor sensor1 = new Sensor("Capteur 1", EAU, bat1, 1, "Salle201");
+		Sensor sensor2 = new Sensor("Capteur 2", EAU, bat1, 1, "Salle201");
+		Sensor sensor3 = new Sensor("Capteur 3", EAU, bat1, 1, "Salle201");
+		sensors.add(sensor1);sensors.add(sensor2);sensors.add(sensor3);
+		
+		Chart chart = new Chart(sensor1,new Date(), new Date(),list);
+		ChartPanel c = chart.show(sensors, new Date(),  new Date(), list, frame);
+		frame.add(c);
+	
 				
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);

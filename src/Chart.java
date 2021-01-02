@@ -1,6 +1,8 @@
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -67,31 +69,35 @@ public class Chart {
 		return sensor.getSensorType();
 	}
 	
-	public void show(Sensor sensor, Date start, Date stop, List<Data> data,JFrame frame) {
-		JFreeChart chart = ChartFactory.createLineChart("Donnees en fonction temps","Temps", "Donnees",createCategoryDataset());
+	public ChartPanel show(List <Sensor> sensors, Date start, Date stop, List<Data> data,JFrame frame) {
+		JFreeChart chart = ChartFactory.createLineChart("Donnees en fonction temps","Temps", "Donnees",createCategoryDataset(sensors));
 		ChartPanel cp = new ChartPanel(chart,true);
-		frame.add(cp);
+		return cp;
 	}
 	
-	private static CategoryDataset createCategoryDataset() {
+	private static CategoryDataset createCategoryDataset(List<Sensor> sensors) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		dataset.setValue(10, "SELLER 1" , "Jan-Mar");
-		dataset.setValue(8, "SELLER 1" , "Avr-Jui");
-		dataset.setValue(12, "SELLER 1" , "Jui-Sep");
-		dataset.setValue(20, "SELLER 1" , "Oct-Dec");
-		dataset.setValue(4, "SELLER 2" , "Jan-Mar");
-		dataset.setValue(8, "SELLER 2" , "Avr-Jui");
-		dataset.setValue(12, "SELLER 2" , "Jui-Sep");
-		dataset.setValue(24, "SELLER 2" , "Oct-Dec");
-		dataset.setValue(30, "SELLER 3" , "Jan-Mar");
-		dataset.setValue(4, "SELLER 3" , "Avr-Jui");
-		dataset.setValue(12, "SELLER 3" , "Jui-Sep");
-		dataset.setValue(1, "SELLER 3" , "Oct-Dec");
+		Random r = new Random();
+		for (Sensor sensor : sensors ) {
+			dataset.setValue(r.nextInt(30), sensor.getName() , "Jan-Mar");
+			dataset.setValue(r.nextInt(30), sensor.getName() , "Avr-Jui");
+			dataset.setValue(r.nextInt(30), sensor.getName() , "Jui-Sep");
+			dataset.setValue(r.nextInt(30), sensor.getName() , "Oct-Dec");
+			dataset.setValue(r.nextInt(30), sensor.getName() , "Jan-Mar");
+			dataset.setValue(8, sensor.getName() , "Avr-Jui");
+			dataset.setValue(12, sensor.getName() , "Jui-Sep");
+			dataset.setValue(24, sensor.getName() , "Oct-Dec");
+			dataset.setValue(r.nextInt(30),sensor.getName() , "Jan-Mar");
+			dataset.setValue(4, sensor.getName() , "Avr-Jui");
+			dataset.setValue(r.nextInt(30), sensor.getName() , "Jui-Sep");
+			dataset.setValue(1, sensor.getName() , "Oct-Dec");
+		}
+		
 		return dataset;
 
 	}
 	
-	public void clear() {
-		
+	public void clear(JFrame frame, Component comp) {
+		frame.remove(comp);
 	}
 }
