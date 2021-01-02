@@ -35,7 +35,7 @@ public class Project extends JFrame {
 	public static void main(String[] args) {
 		
 		// Lancer serveur sur port 8952
-		Server server = new Server(8956);
+		Server server = new Server(8952);
 		server.open();
 		
 //		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
