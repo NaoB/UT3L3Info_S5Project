@@ -1,13 +1,41 @@
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+
+import model.Building;
+import model.Data;
+import model.Sensor;
+import model.SensorType;
+
+import org.jfree.chart.ChartFactory;
+
 import network.Server;
 
-public class Project {
+public class Project extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) {
 		
 		// Lancer serveur sur port 8952
-		Server server = new Server(8952);
+		Server server = new Server(8956);
 		server.open();
 		
 //		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
@@ -40,16 +68,26 @@ public class Project {
 		
 		
 		// Creation fenêtre principale
-		/*JFrame frame = new JFrame("Capteurs du campus");
+		JFrame frame = new JFrame("Capteurs du campus");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1200, 900);*/
+		frame.setSize(1200, 900);
 				
 		// Création, paramétrage et positionnement des composants
 				/*TODO*/
+		
+		// CHART
+		List<Data> list = new ArrayList<>();
+		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
+		Building bat1 = new Building("Batiment 1");
+		Sensor sensor = new Sensor("S1", EAU, bat1, 1, "Salle201");
+		Chart chart = new Chart(sensor,new Date(), new Date(),list);
+		chart.show(sensor, new Date(),  new Date(), list, frame);
+		
 				
-		/*frame.setLocationRelativeTo(null);
-		frame.setVisible(true);*/
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 
 	}
+
 	
 }
