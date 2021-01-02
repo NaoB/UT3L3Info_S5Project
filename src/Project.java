@@ -70,7 +70,7 @@ public class Project extends JFrame {
 		// Creation fenêtre principale
 		JFrame frame = new JFrame("Capteurs du campus");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1200, 900);
+		frame.setSize(900, 900);
 				
 		// Création, paramétrage et positionnement des composants
 				/*TODO*/
@@ -88,7 +88,14 @@ public class Project extends JFrame {
 		
 		Chart chart = new Chart(sensor1,new Date(), new Date(),list);
 		ChartPanel c = chart.show(sensors, new Date(),  new Date(), list, frame);
-		frame.add(c);
+		JPanel jpanelText = new JPanel();
+		jpanelText.setLayout(new
+		FlowLayout(FlowLayout.CENTER));
+		
+		JSplitPane jsp = new JSplitPane(0,c,jpanelText);
+		jsp.setDividerLocation(450);
+		frame.add(jsp);
+		//frame.add(c);
 	
 				
 		frame.setLocationRelativeTo(null);

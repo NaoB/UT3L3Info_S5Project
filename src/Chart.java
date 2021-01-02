@@ -70,7 +70,7 @@ public class Chart {
 	}
 	
 	public ChartPanel show(List <Sensor> sensors, Date start, Date stop, List<Data> data,JFrame frame) {
-		JFreeChart chart = ChartFactory.createLineChart("Donnees en fonction temps","Temps", "Donnees",createCategoryDataset(sensors));
+		JFreeChart chart = ChartFactory.createLineChart("Donnees en fonction du temps","Temps", "Donnees",createCategoryDataset(sensors));
 		ChartPanel cp = new ChartPanel(chart,true);
 		return cp;
 	}
