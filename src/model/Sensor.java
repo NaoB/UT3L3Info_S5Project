@@ -135,6 +135,13 @@ public class Sensor extends Model {
 		return query(qs);
 	}
 	
+	public static Sensor findOne(String nameSearched) {
+		String qs = String.format("SELECT * FROM %s WHERE %s = '%s'", tableName, primaryKey, nameSearched);
+		List<Sensor> result = query(qs);
+		if (result.isEmpty()) return null;
+		else return result.get(0);
+	}
+	
 	public static List<Sensor> search(Map<String, ?> params) {
 		String qs = String.format("SELECT * FROM %s WHERE ", tableName);
 		for (Entry<String, ?> param : params.entrySet()) {

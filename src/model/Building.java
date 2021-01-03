@@ -58,6 +58,13 @@ public class Building extends Model {
 		String qs = String.format("SELECT * FROM %s WHERE %s = '%s'", tableName, primaryKey, nameSearched);
 		return query(qs);
 	}
+	
+	public static Building findOne(String nameSearched) {
+		String qs = String.format("SELECT * FROM %s WHERE %s = '%s'", tableName, primaryKey, nameSearched);
+		List<Building> result = query(qs);
+		if (result.isEmpty()) return null;
+		else return result.get(0);
+	}
 
 	public static List<Building> search(Map<String, ?> params) {
 		String qs = String.format("SELECT * FROM %s WHERE ", tableName);

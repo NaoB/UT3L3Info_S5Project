@@ -6,8 +6,8 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/emmae/Downloads/mysql-connector-java-8.0.22.jar"/>
-	<classpathentry kind="lib" path="C:/Users/emmae/Downloads/jfreechart-1.0.19.jar"/>
-	<classpathentry kind="lib" path="C:/Users/emmae/Downloads/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="/home/kaliasha/Downloads/mysql-connector-java-8.0.22.jar"/>
+	<classpathentry kind="lib" path="/home/kaliasha/Downloads/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="/home/kaliasha/Downloads/jfreechart-1.0.19/lib/jcommon-1.0.23.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

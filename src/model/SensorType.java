@@ -80,6 +80,13 @@ public class SensorType extends Model {
 		return query(qs);
 	}
 	
+	public static SensorType findOne(String nameSearched) {
+		String qs = String.format("SELECT * FROM %s WHERE %s = '%s'", tableName, primaryKey, nameSearched);
+		List<SensorType> result = query(qs);
+		if (result.isEmpty()) return null;
+		else return result.get(0);
+	}
+	
 	public static List<SensorType> search(Map<String, ?> params) {
 		String qs = String.format("SELECT * FROM %s WHERE ", tableName);
 		for (Entry<String, ?> param : params.entrySet()) {

@@ -8,7 +8,7 @@ public class Database {
 
 	private static Database INSTANCE = new Database();
 	
-	private String dbHost = "78.47.51.171";
+	private String dbHost = "78.47.240.104";
 	private String dbName = "project";
 	private String dbUser = "root";
 	private String dbPass = "projetS5AAB";
