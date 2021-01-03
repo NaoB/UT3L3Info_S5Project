@@ -87,36 +87,27 @@ public class ClientProcessor implements Runnable{
    private void connexion(String[] data) {
 	   String name = data[1];
 	   String[] description = data[2].split(":");
-	   SensorType sensorType = SensorType.find(description[0]).get(0);
-	   List<Building> buildings = Building.find(description[1]);
-	   Building building;
-	   if (buildings.isEmpty()) {
+	   SensorType sensorType = SensorType.findOne(description[0]);
+	   Building building = Building.findOne(description[1]);
+	   if (building == null) {
 		   building = new Building(description[1]);
 		   building.save();
-	   } else {
-		   building = buildings.get(0);
 	   }
 	   int floor = Integer.parseInt(description[2]);
 	   String location = description[3];
 	   // Search if sensor already exists
-	   List<Sensor> sensors = Sensor.find(name);
-	   Sensor sensor;
-	   if (sensors.isEmpty()) {
+	   Sensor sensor = Sensor.findOne(name);
+	   if (sensor == null) {
 		   sensor = new Sensor(name, sensorType, building, floor, location);
-		   sensor.setConnected(true);
-		   sensor.save();		   
-	   } else {
-		   sensor = sensors.get(0);
-		   sensor.setConnected(true);
-		   sensor.save();
 	   }
+	   sensor.setConnected(true);
+	   sensor.save();		   
    }
    
    private void donnee(String[] data) {
-	   List<Sensor> sensors = Sensor.find(data[1]);
+	   Sensor sensor = Sensor.findOne(data[1]);
 	   // If sensor doesn't exists do nothing
-	   if (!sensors.isEmpty()) {
-		 Sensor sensor = sensors.get(0);
+	   if (sensor != null) {
 		 float value = Float.parseFloat(data[2]);
 		 sensor.setValue(value);
 		 sensor.save();
@@ -126,10 +117,9 @@ public class ClientProcessor implements Runnable{
    }
    
    private void deconnexion(String[] data) {
-	   List<Sensor> sensors = Sensor.find(data[1]);
+	   Sensor sensor = Sensor.findOne(data[1]);
 	   // If sensor doesn't exists do nothing
-	   if (!sensors.isEmpty()) {
-		 Sensor sensor = sensors.get(0);
+	   if (sensor != null) {
 		 sensor.setConnected(false);
 		 sensor.save();
 	   }
