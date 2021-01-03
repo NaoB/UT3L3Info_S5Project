@@ -24,6 +24,7 @@ import model.SensorType;
 import org.jfree.chart.ChartFactory;
 
 import network.Server;
+import sensormanagement.ManagementPanel;
 
 public class Project extends JFrame {
 
@@ -37,42 +38,13 @@ public class Project extends JFrame {
 		// Lancer serveur sur port 8952
 		Server server = new Server(8952);
 		server.open();
-		
-//		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
-//		SensorType AIR = new SensorType("AIRCOMPRIME", "m3/h", 0, 5);
-//		SensorType ELECTRICITE = new SensorType("ELECTRICITE", "kWh", 10, 500);
-//		SensorType TEMPERATURE = new SensorType("TEMPERATURE", "Â°C", 17, 22);
-//		EAU.save();
-//		AIR.save();
-//		ELECTRICITE.save();
-//		TEMPERATURE.save();
-		
-//		Building bat1 = new Building("Batiment 1");
-//		bat1.save();
-//		
-//		Sensor s1 = new Sensor("S1", EAU, bat1, 1, "Salle201");
-//		s1.save();
-//		Sensor s2 = new Sensor("S2", EAU, bat1, 2, "Salle301");
-//		s2.save();
-//		
-//		Random rdm = new Random();
-//		for (int i = 0; i < 10; i++) {
-//			Data x = new Data(LocalDateTime.now(), i % 2 == 0 ? s1 : s2, rdm.nextFloat());
-//			x.save();
-//		}
-//		
-//		for (Sensor s : EAU.getSensors()) {
-//			System.out.println(s.toString());
-//		}
-		
-		
-		
-		// Creation fenêtre principale
+				
+		// Creation fenï¿½tre principale
 		JFrame frame = new JFrame("Capteurs du campus");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(900, 900);
 				
-		// Création, paramétrage et positionnement des composants
+		// Crï¿½ation, paramï¿½trage et positionnement des composants
 				/*TODO*/
 		
 		// CHART
@@ -87,17 +59,20 @@ public class Project extends JFrame {
 		sensors.add(sensor1);sensors.add(sensor2);sensors.add(sensor3);
 		
 		Chart chart = new Chart(sensor1,new Date(), new Date(),list);
-		ChartPanel c = chart.show(sensors, new Date(),  new Date(), list, frame);
+		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), list, frame);
 		JPanel jpanelText = new JPanel();
 		jpanelText.setLayout(new
 		FlowLayout(FlowLayout.CENTER));
 		
-		JSplitPane jsp = new JSplitPane(0,c,jpanelText);
-		jsp.setDividerLocation(450);
-		frame.add(jsp);
-		//frame.add(c);
-	
-				
+		// Panel pour les deux blocs Ã  gauche (Temps Reel et Gestion)
+		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
+		// Panel pour le prÃ©cedent et les graphiques
+		JSplitPane splitVertical = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitHorizontal, chartPanel);
+		frame.add(splitVertical);
+
+		splitHorizontal.setDividerLocation(frame.getHeight() / 2);
+		splitVertical.setDividerLocation(frame.getWidth() / 2);
+		
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
