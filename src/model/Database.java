@@ -8,10 +8,10 @@ public class Database {
 
 	private static Database INSTANCE = new Database();
 	
-	private String dbHost = "localhost";
+	private String dbHost = "78.47.51.171";
 	private String dbName = "project";
 	private String dbUser = "root";
-	private String dbPass = "root";
+	private String dbPass = "projetS5AAB";
 	private Connection connection;
 	
 	private Database() {
