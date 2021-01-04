@@ -39,34 +39,25 @@ public class Project extends JFrame {
 		Server server = new Server(8952);
 		server.open();
 				
-		// Creation fenï¿½tre principale
+		// Creation fenêtre principale
 		JFrame frame = new JFrame("Capteurs du campus");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(900, 900);
 				
-		// Crï¿½ation, paramï¿½trage et positionnement des composants
-				/*TODO*/
+		// Création, paramétrage et positionnement des composants
 		
-		// CHART
+		// Visualisation a posteriori
+		List<Sensor> sensors = Sensor.fetchAll();
 		List<Data> list = new ArrayList<>();
-		List<Sensor> sensors = new ArrayList<>();
-		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
-		
-		Building bat1 = new Building("Batiment 1");
-		Sensor sensor1 = new Sensor("Capteur 1", EAU, bat1, 1, "Salle201");
-		Sensor sensor2 = new Sensor("Capteur 2", EAU, bat1, 1, "Salle201");
-		Sensor sensor3 = new Sensor("Capteur 3", EAU, bat1, 1, "Salle201");
-		sensors.add(sensor1);sensors.add(sensor2);sensors.add(sensor3);
-		
-		Chart chart = new Chart(sensor1,new Date(), new Date(),list);
-		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), list, frame);
+	
+		Chart chart = new Chart(sensors,new Date(), new Date(),list);
+		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), frame);
 		JPanel jpanelText = new JPanel();
-		jpanelText.setLayout(new
-		FlowLayout(FlowLayout.CENTER));
+		jpanelText.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
-		// Panel pour les deux blocs Ã  gauche (Temps Reel et Gestion)
+		// Panel pour les deux blocs à  gauche (Temps Reel et Gestion)
 		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
-		// Panel pour le prÃ©cedent et les graphiques
+		// Panel pour le précedent et les graphiques
 		JSplitPane splitVertical = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitHorizontal, chartPanel);
 		frame.add(splitVertical);
 
