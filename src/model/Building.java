@@ -67,9 +67,10 @@ public class Building extends Model {
 	}
 
 	public static List<Building> search(Map<String, ?> params) {
-		String qs = String.format("SELECT * FROM %s WHERE ", tableName);
+		String qs = String.format("SELECT * FROM %s", tableName);
+		if (!params.isEmpty()) qs = qs.concat(" WHERE ");
 		for (Entry<String, ?> param : params.entrySet()) {
-			qs.concat(String.format("%s = '%s' ", param.getKey(), param.getValue().toString()));
+			qs = qs.concat(String.format("%s = '%s' ", param.getKey(), param.getValue().toString()));
 		}
 		return query(qs);
 	}

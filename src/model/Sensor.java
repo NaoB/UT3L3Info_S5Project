@@ -143,7 +143,8 @@ public class Sensor extends Model {
 	}
 	
 	public static List<Sensor> search(Map<String, ?> params) {
-		String qs = String.format("SELECT * FROM %s WHERE ", tableName);
+		String qs = String.format("SELECT * FROM %s", tableName);
+		if (!params.isEmpty()) qs = qs.concat(" WHERE ");
 		for (Entry<String, ?> param : params.entrySet()) {
 			qs = qs.concat(String.format("%s = '%s' ", param.getKey(), param.getValue().toString()));
 		}
