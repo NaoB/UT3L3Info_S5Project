@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -69,13 +72,14 @@ public class Project extends JFrame {
 		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), frame);
 		
 		JLabel label=new JLabel("Visualisation des données a posteriori",JLabel.CENTER);
-		label.setSize(300,200);
 		String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
 		JComboBox<String> fluidList = new JComboBox<>(fluids);
+		fluidList.setMaximumSize(new Dimension(50,40));
 		
 		JSpinner infBound = new JSpinner();
+		infBound.setMaximumSize(new Dimension(50,40));
 		JSpinner supBound = new JSpinner();
-
+		supBound.setMaximumSize(new Dimension(50,40));
 
 		JPanel jpanelText = new JPanel();
 		jpanelText.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -87,7 +91,30 @@ public class Project extends JFrame {
 		JPanel panel = new JPanel();
 		JSplitPane splitVertical = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitHorizontal, panel);
 		
-		panel.add(label);
+		Box line1=new Box(BoxLayout.X_AXIS);
+		line1.add(Box.createHorizontalGlue());
+		line1.add(label);
+		line1.add(Box.createHorizontalGlue());
+		
+		Box line2=new Box(BoxLayout.X_AXIS);
+		line2.add(new JLabel("Fluide : "));
+		line2.add(fluidList);
+		line2.add(Box.createHorizontalGlue());
+		line2.add(new JLabel("Date début (secondes) : "));
+		line2.add(infBound);
+		line2.add(Box.createHorizontalGlue());
+		line2.add(new JLabel("Date fin (secondes) : "));
+		line2.add(supBound);
+		line2.add(Box.createHorizontalGlue());
+		JButton buttonOk = new JButton("OK");
+		line2.add(buttonOk);
+		
+		
+		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+		panel.add(line1);
+		panel.add(line2);
+		
+		/*panel.add(label);
 		panel.add(new JLabel("Fluide"));
 		panel.add(fluidList);
 		panel.add(new JLabel("Date début (secondes)"));
@@ -95,7 +122,7 @@ public class Project extends JFrame {
 		panel.add(new JLabel("Date fin (secondes)"));
 		panel.add(supBound);
 		JButton buttonOk = new JButton("OK");
-		panel.add(buttonOk);
+		panel.add(buttonOk);*/
 		
 		buttonOk.addActionListener(new ActionListener(){
 			@Override public void 
@@ -105,6 +132,7 @@ public class Project extends JFrame {
 				case "EAU" : 
 					for (Sensor s : EAU.getSensors()) {
 						JCheckBox cac = new JCheckBox(s.getName());
+						panel.remove(cac);
 						panel.add(cac);
 					}
 					break;
@@ -112,6 +140,7 @@ public class Project extends JFrame {
 				case "ELECTRICITE" :
 					for (Sensor s : ELECTRICITE.getSensors()) {
 						JCheckBox cac = new JCheckBox(s.getName());
+						panel.remove(cac);
 						panel.add(cac);
 					}
 					break;
@@ -119,12 +148,14 @@ public class Project extends JFrame {
 				case "TEMPERATURE" :
 					for (Sensor s : TEMPERATURE.getSensors()) {
 						JCheckBox cac = new JCheckBox(s.getName());
+						panel.remove(cac);
 						panel.add(cac);
 					}
 					break;
 				default : // air comprimé
 					for (Sensor s : AIR.getSensors()) {
 						JCheckBox cac = new JCheckBox(s.getName());
+						panel.remove(cac);
 						panel.add(cac);
 					}
 					break;
