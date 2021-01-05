@@ -19,8 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
-import javax.swing.JToggleButton;
-import javax.swing.SpinnerModel;
 
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
@@ -94,11 +92,7 @@ public class Project extends JFrame {
 				switch(fluid) {
 				case "EAU" : 
 					for (Sensor s : EAU.getSensors()) {
-						JCheckBox cac = new JCheckBox(s.getName());
-						panel.removeAll();
-						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
-						panel.add(cac);
-						
+						JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);		
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
@@ -106,15 +100,10 @@ public class Project extends JFrame {
 							}
 						});
 					}
-					break;
-					
+					break;			
 				case "ELECTRICITE" :
 					for (Sensor s : ELECTRICITE.getSensors()) {
-						JCheckBox cac = new JCheckBox(s.getName());
-						panel.removeAll();
-						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
-						panel.add(cac);
-						
+						JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);		
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
@@ -122,15 +111,10 @@ public class Project extends JFrame {
 							}
 						});
 					}
-					break;
-					
+					break;			
 				case "TEMPERATURE" :
 					for (Sensor s : TEMPERATURE.getSensors()) {
-						panel.removeAll();
-						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
-						JCheckBox cac = new JCheckBox(s.getName());
-						panel.add(cac);
-						
+						JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);		
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
@@ -141,11 +125,7 @@ public class Project extends JFrame {
 					break;
 				default : // air comprimé
 					for (Sensor s : AIR.getSensors()) {
-						panel.removeAll();
-						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
-						JCheckBox cac = new JCheckBox(s.getName());
-						panel.add(cac);
-						
+						JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);	
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
@@ -166,6 +146,15 @@ public class Project extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
+	}
+	
+	private static JCheckBox showCheckBox(JButton buttonOk, JLabel label, JComboBox<String> fluidList,
+			JSpinner infBound, JSpinner supBound, JPanel panel, Sensor s) {
+		JCheckBox cac = new JCheckBox(s.getName());
+		panel.removeAll();
+		showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
+		panel.add(cac);
+		return cac;
 	}
 
 	private static void showBasicPanel(JLabel label, JComboBox<String> fluidList, JSpinner infBound,
