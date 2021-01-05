@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class SensorType extends Model {
 	
@@ -104,6 +105,29 @@ public class SensorType extends Model {
 	@Override
 	protected String getUpdateSQL() {
 		return null;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(max, min, name, unit);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SensorType other = (SensorType) obj;
+		return name.equals(other.name) && unit.equals(other.unit) && min == other.min && max == other.max;
 	}
 	
 	

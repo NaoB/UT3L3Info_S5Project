@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class Data extends Model{
 	
@@ -93,5 +94,24 @@ public class Data extends Model{
 	protected String getUpdateSQL() {
 		return null;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(moment, sensor, value);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Data other = (Data) obj;
+		return moment.equals(other.moment) && sensor.equals(other.sensor) && value == other.value;
+	}
+	
+	
 	
 }

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class Sensor extends Model {
 
@@ -163,9 +164,36 @@ public class Sensor extends Model {
 				tableName, sensorType.name, building.name, floor, location, connected ? 1 : 0, value, min, max, primaryKey, name);
 	}
 	
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(building, connected, floor, location, max, min, name, sensorType);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Sensor other = (Sensor) obj;
+		return  name.equals(other.name)
+				&& building.equals(other.building)
+				&& connected == other.connected
+				&& floor == other.floor
+				&& location.equals(other.location)
+				&& max == other.max
+				&& min == other.min
+				&& sensorType.equals(other.sensorType);
+	}
+
 	@Override
 	public String toString() {
-		return String.format("Sensor(%s, %s, %s, Floor %d, %s, %s, Value %f, Min %f, Max %f)", name, sensorType.name, building.name, floor, location, connected ? "Connected" : "Not connected", value, min, max);
+		return name;
 	}
+
 	
 }

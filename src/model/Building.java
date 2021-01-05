@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class Building extends Model {
 	
@@ -84,6 +85,29 @@ public class Building extends Model {
 	protected String getUpdateSQL() {
 		return null;
 	}
+	
+	
 
+	@Override
+	public String toString() {
+		return "Batiment " + name;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Building other = (Building) obj;
+		return name.equals(other.name);
+	}
 	
 }
