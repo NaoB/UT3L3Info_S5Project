@@ -1,4 +1,5 @@
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
@@ -77,6 +79,13 @@ public class Chart {
 	public ChartPanel show(List <Sensor> sensors, Date start, Date stop,JFrame frame) {
 		JFreeChart chart = ChartFactory.createLineChart("Donnees en fonction du temps","Temps", "Donnees",createCategoryDataset(sensors));
 		ChartPanel cp = new ChartPanel(chart,true);
+		
+		Dimension dimension = new Dimension(100,100);
+		cp.setPreferredSize(dimension);
+		
+		/*ChartFrame cf = new ChartFrame("Visualisation a posteriori", chart , true);
+		cf.setVisible(true);*/
+		
 		return cp;
 	}
 	

@@ -1,12 +1,17 @@
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 
 import org.jfree.chart.ChartFrame;
@@ -52,13 +57,34 @@ public class Project extends JFrame {
 	
 		Chart chart = new Chart(sensors,new Date(), new Date(),list);
 		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), frame);
+		
+		JLabel label=new JLabel("Visualisation des données a posteriori");
+		String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
+		JComboBox<String> fluidList = new JComboBox<>(fluids);
+		
+		JSpinner infBound = new JSpinner();
+		JSpinner supBound = new JSpinner();
+
+
 		JPanel jpanelText = new JPanel();
 		jpanelText.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
 		// Panel pour les deux blocs à  gauche (Temps Reel et Gestion)
 		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
+		
 		// Panel pour le précedent et les graphiques
 		JSplitPane splitVertical = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitHorizontal, chartPanel);
+		
+		chartPanel.add(label);
+		chartPanel.add(new JLabel("Fluide"));
+		chartPanel.add(fluidList);
+		chartPanel.add(new JLabel("Date début (secondes)"));
+		chartPanel.add(infBound);
+		chartPanel.add(new JLabel("Date fin (secondes)"));
+		chartPanel.add(supBound);
+		chartPanel.add(new JButton("OK"));
+		
+		
 		frame.add(splitVertical);
 
 		splitHorizontal.setDividerLocation(frame.getHeight() / 2);
