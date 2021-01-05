@@ -41,9 +41,6 @@ import sensormanagement.ManagementPanel;
 
 public class Project extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) {
@@ -56,6 +53,7 @@ public class Project extends JFrame {
 		SensorType AIR = new SensorType("AIRCOMPRIME", "m3/h", 0, 5);
 		SensorType ELECTRICITE = new SensorType("ELECTRICITE", "kWh", 10, 500);
 		SensorType TEMPERATURE = new SensorType("TEMPERATURE", "°C", 17, 22);
+		JButton buttonOk = new JButton("OK");
 		
 		// Creation fenêtre principale
 		JFrame frame = new JFrame("Capteurs du campus");
@@ -63,19 +61,21 @@ public class Project extends JFrame {
 		frame.setSize(1200, 900); 
 				
 		// Création, paramétrage et positionnement des composants
+		// Panel pour les deux blocs à  gauche (Temps Reel et Gestion)
+		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
 		
 		// Visualisation a posteriori
 		List<Sensor> sensors = Sensor.fetchAll();
 		List<Data> list = new ArrayList<>();
-	
+			
 		Chart chart = new Chart(sensors,new Date(), new Date(),list);
 		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), frame);
-		
+				
 		JLabel label=new JLabel("Visualisation des données a posteriori",JLabel.CENTER);
 		String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
 		JComboBox<String> fluidList = new JComboBox<>(fluids);
 		fluidList.setMaximumSize(new Dimension(50,40));
-		
+				
 		JSpinner infBound = new JSpinner();
 		infBound.setMaximumSize(new Dimension(50,40));
 		JSpinner supBound = new JSpinner();
@@ -84,45 +84,11 @@ public class Project extends JFrame {
 		JPanel jpanelText = new JPanel();
 		jpanelText.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
-		// Panel pour les deux blocs à  gauche (Temps Reel et Gestion)
-		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
-		
 		// Panel pour le précedent et les graphiques
 		JPanel panel = new JPanel();
 		JSplitPane splitVertical = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitHorizontal, panel);
 		
-		Box line1=new Box(BoxLayout.X_AXIS);
-		line1.add(Box.createHorizontalGlue());
-		line1.add(label);
-		line1.add(Box.createHorizontalGlue());
-		
-		Box line2=new Box(BoxLayout.X_AXIS);
-		line2.add(new JLabel("Fluide : "));
-		line2.add(fluidList);
-		line2.add(Box.createHorizontalGlue());
-		line2.add(new JLabel("Date début (secondes) : "));
-		line2.add(infBound);
-		line2.add(Box.createHorizontalGlue());
-		line2.add(new JLabel("Date fin (secondes) : "));
-		line2.add(supBound);
-		line2.add(Box.createHorizontalGlue());
-		JButton buttonOk = new JButton("OK");
-		line2.add(buttonOk);
-		
-		
-		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-		panel.add(line1);
-		panel.add(line2);
-		
-		/*panel.add(label);
-		panel.add(new JLabel("Fluide"));
-		panel.add(fluidList);
-		panel.add(new JLabel("Date début (secondes)"));
-		panel.add(infBound);
-		panel.add(new JLabel("Date fin (secondes)"));
-		panel.add(supBound);
-		JButton buttonOk = new JButton("OK");
-		panel.add(buttonOk);*/
+		showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 		
 		buttonOk.addActionListener(new ActionListener(){
 			@Override public void 
@@ -132,7 +98,8 @@ public class Project extends JFrame {
 				case "EAU" : 
 					for (Sensor s : EAU.getSensors()) {
 						JCheckBox cac = new JCheckBox(s.getName());
-						panel.remove(cac);
+						panel.removeAll();
+						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 						panel.add(cac);
 					}
 					break;
@@ -140,22 +107,25 @@ public class Project extends JFrame {
 				case "ELECTRICITE" :
 					for (Sensor s : ELECTRICITE.getSensors()) {
 						JCheckBox cac = new JCheckBox(s.getName());
-						panel.remove(cac);
+						panel.removeAll();
+						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 						panel.add(cac);
 					}
 					break;
 					
 				case "TEMPERATURE" :
 					for (Sensor s : TEMPERATURE.getSensors()) {
+						panel.removeAll();
+						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 						JCheckBox cac = new JCheckBox(s.getName());
-						panel.remove(cac);
 						panel.add(cac);
 					}
 					break;
 				default : // air comprimé
 					for (Sensor s : AIR.getSensors()) {
+						panel.removeAll();
+						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 						JCheckBox cac = new JCheckBox(s.getName());
-						panel.remove(cac);
 						panel.add(cac);
 					}
 					break;
@@ -171,6 +141,31 @@ public class Project extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
+	}
+
+	private static void showBasicPanel(JLabel label, JComboBox<String> fluidList, JSpinner infBound,
+			JSpinner supBound, JPanel panel,JButton btn) {
+		Box line1=new Box(BoxLayout.X_AXIS);
+		line1.add(Box.createHorizontalGlue());
+		line1.add(label);
+		line1.add(Box.createHorizontalGlue());
+		
+		Box line2=new Box(BoxLayout.X_AXIS);
+		line2.add(new JLabel("Fluide : "));
+		line2.add(fluidList);
+		line2.add(Box.createHorizontalGlue());
+		line2.add(new JLabel("Date début (secondes) : "));
+		line2.add(infBound);
+		line2.add(Box.createHorizontalGlue());
+		line2.add(new JLabel("Date fin (secondes) : "));
+		line2.add(supBound);
+		line2.add(Box.createHorizontalGlue());
+		line2.add(btn);
+		
+		
+		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+		panel.add(line1);
+		panel.add(line2);
 	}
 
 	
