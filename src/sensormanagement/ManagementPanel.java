@@ -1,67 +1,68 @@
 package sensormanagement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
-import javax.swing.text.JTextComponent;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.Timer;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreeSelectionModel;
 
-import model.Building;
 import model.Sensor;
 
 public class ManagementPanel extends JSplitPane {
 	
+	private static final long serialVersionUID = -118482075845316111L;
+
 	// Composants visuels
-	JTree tree;
-	JPanel details;
+	private JTree tree;
+	private DetailsPanel details;
+	
+	private int delay = 2000;
 	
 	public ManagementPanel() {
 		super(JSplitPane.HORIZONTAL_SPLIT);
-		this.add(buildTree());
-		this.add(new JLabel("Hello"));
+		
+		createTree();
+		createDetails();
+		
+		ActionListener action = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				repaint();
+				revalidate();
+				System.out.println("UI updated");
+			}
+		};
+		
+		Timer timer = new Timer(delay, action);
+		timer.start();
 	}
 	
-	private JTree buildTree() {
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-		List<Building> buildings = Building.fetchAll();
-		for (Building building : buildings) {
-			DefaultMutableTreeNode buildingNode = new DefaultMutableTreeNode("Batiment " + building.getName());
-			root.add(buildingNode);
-			List<Sensor> sensors = building.getSensors();
-			Map<Integer, List<Sensor>> floors = new HashMap<>();
-			for (Sensor sensor : sensors) {
-				List<Sensor> sensorsAtFloor = floors.getOrDefault(sensor.getFloor(), new ArrayList<>());
-				sensorsAtFloor.add(sensor);
-				floors.put(sensor.getFloor(), sensorsAtFloor);
+	private void createTree() {
+		// Arbre des capteurs
+		tree = new JTree(new SensorTreeModel());
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+			@Override
+			public void valueChanged(TreeSelectionEvent arg0) {
+				treeOnSelection(tree.getLastSelectedPathComponent());
 			}
-			for (Entry<Integer, List<Sensor>> floor : floors.entrySet()) {
-				DefaultMutableTreeNode floorNode = new DefaultMutableTreeNode("Etage " + floor.getKey());
-				buildingNode.add(floorNode);
-				for (Sensor sensor : floor.getValue()) {
-					DefaultMutableTreeNode sensorNode = new DefaultMutableTreeNode(sensor.getName());
-					floorNode.add(sensorNode);
-				}
-			}
+		});
+		this.add(tree);
+	}
+	
+	private void createDetails() {
+		// Panneau des details
+		details = new DetailsPanel();
+		this.add(details);
+	}
+	
+	private void treeOnSelection(Object node) {
+		if (node instanceof Sensor) {
+			details.setSensor((Sensor) node);
 		}
-		DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
-		renderer.setLeafIcon(null);
-		renderer.setOpenIcon(null);
-		renderer.setClosedIcon(null);
-		JTree out = new JTree(root);
-		out.setCellRenderer(renderer);
-		out.setRootVisible(false);
-		out.setShowsRootHandles(true);
-		return out;
 	}
-
-	
-	
 }
