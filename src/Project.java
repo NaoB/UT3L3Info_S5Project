@@ -134,7 +134,7 @@ public class Project extends JFrame {
 		});
 		
 		frame.add(splitVertical);
-
+		//frame.add(new RealTimePanel());
 		splitHorizontal.setDividerLocation(frame.getHeight() / 2);
 		splitVertical.setDividerLocation(frame.getWidth() / 2);
 		
