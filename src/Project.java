@@ -67,9 +67,6 @@ public class Project extends JFrame {
 		// Visualisation a posteriori
 		List<Sensor> sensors = Sensor.fetchAll();
 		List<Data> list = new ArrayList<>();
-			
-		Chart chart = new Chart(sensors,new Date(), new Date(),list);
-		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), frame);
 				
 		JLabel label=new JLabel("Visualisation des données a posteriori",JLabel.CENTER);
 		String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
@@ -101,6 +98,13 @@ public class Project extends JFrame {
 						panel.removeAll();
 						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 						panel.add(cac);
+						
+						cac.addActionListener(new ActionListener(){
+							@Override public void 
+							actionPerformed(ActionEvent e) {
+								showGraphic(frame, sensors, list, panel, cac);
+							}
+						});
 					}
 					break;
 					
@@ -110,6 +114,13 @@ public class Project extends JFrame {
 						panel.removeAll();
 						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 						panel.add(cac);
+						
+						cac.addActionListener(new ActionListener(){
+							@Override public void 
+							actionPerformed(ActionEvent e) {
+								showGraphic(frame, sensors, list, panel, cac);
+							}
+						});
 					}
 					break;
 					
@@ -119,6 +130,13 @@ public class Project extends JFrame {
 						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 						JCheckBox cac = new JCheckBox(s.getName());
 						panel.add(cac);
+						
+						cac.addActionListener(new ActionListener(){
+							@Override public void 
+							actionPerformed(ActionEvent e) {
+								showGraphic(frame, sensors, list, panel, cac);
+							}
+						});
 					}
 					break;
 				default : // air comprimé
@@ -127,6 +145,13 @@ public class Project extends JFrame {
 						showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 						JCheckBox cac = new JCheckBox(s.getName());
 						panel.add(cac);
+						
+						cac.addActionListener(new ActionListener(){
+							@Override public void 
+							actionPerformed(ActionEvent e) {
+								showGraphic(frame, sensors, list, panel, cac);
+							}
+						});
 					}
 					break;
 				}
@@ -168,5 +193,13 @@ public class Project extends JFrame {
 		panel.add(line2);
 	}
 
+	private static void showGraphic(JFrame frame, List<Sensor> sensors, List<Data> list, JPanel panel,
+			JCheckBox cac) {
+		if(cac.isSelected()) {
+		Chart chart = new Chart(sensors,new Date(), new Date(),list);
+		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), frame);
+		panel.add(chartPanel);
+		}
+	}
 	
 }
