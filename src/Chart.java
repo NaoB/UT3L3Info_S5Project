@@ -91,7 +91,7 @@ public class Chart {
 		for (Sensor sensor : sensors ) {
 			for (Data data : sensor.getDatas())
 			{
-				dataset.setValue(data.getValue(), sensor.getName() , data.getMoment().toString());
+				dataset.setValue(data.getValue(), sensor.getName() , String.valueOf(data.getMoment().getSecond()));
 			}
 		}
 		return dataset;
