@@ -79,10 +79,7 @@ public class Chart {
 	public ChartPanel show(List <Sensor> sensors, Date start, Date stop,JFrame frame) {
 		JFreeChart chart = ChartFactory.createLineChart("Donnees en fonction du temps","Temps", "Donnees",createCategoryDataset(sensors));
 		ChartPanel cp = new ChartPanel(chart,true);
-		
-		Dimension dimension = new Dimension(100,100);
-		cp.setPreferredSize(dimension);
-		
+			
 		/*ChartFrame cf = new ChartFrame("Visualisation a posteriori", chart , true);
 		cf.setVisible(true);*/
 		

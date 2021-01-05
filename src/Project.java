@@ -58,7 +58,8 @@ public class Project extends JFrame {
 		Chart chart = new Chart(sensors,new Date(), new Date(),list);
 		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), frame);
 		
-		JLabel label=new JLabel("Visualisation des données a posteriori");
+		JLabel label=new JLabel("Visualisation des données a posteriori",JLabel.CENTER);
+		label.setSize(300,200);
 		String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
 		JComboBox<String> fluidList = new JComboBox<>(fluids);
 		
@@ -73,16 +74,17 @@ public class Project extends JFrame {
 		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
 		
 		// Panel pour le précedent et les graphiques
-		JSplitPane splitVertical = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitHorizontal, chartPanel);
+		JPanel panel = new JPanel();
+		JSplitPane splitVertical = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitHorizontal, panel);
 		
-		chartPanel.add(label);
-		chartPanel.add(new JLabel("Fluide"));
-		chartPanel.add(fluidList);
-		chartPanel.add(new JLabel("Date début (secondes)"));
-		chartPanel.add(infBound);
-		chartPanel.add(new JLabel("Date fin (secondes)"));
-		chartPanel.add(supBound);
-		chartPanel.add(new JButton("OK"));
+		panel.add(label);
+		panel.add(new JLabel("Fluide"));
+		panel.add(fluidList);
+		panel.add(new JLabel("Date début (secondes)"));
+		panel.add(infBound);
+		panel.add(new JLabel("Date fin (secondes)"));
+		panel.add(supBound);
+		panel.add(new JButton("OK"));
 		
 		
 		frame.add(splitVertical);
