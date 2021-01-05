@@ -1,11 +1,14 @@
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,6 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
+import javax.swing.JToggleButton;
+import javax.swing.SpinnerModel;
 
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
@@ -44,10 +49,15 @@ public class Project extends JFrame {
 		Server server = new Server(8952);
 		server.open();
 				
+		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
+		SensorType AIR = new SensorType("AIRCOMPRIME", "m3/h", 0, 5);
+		SensorType ELECTRICITE = new SensorType("ELECTRICITE", "kWh", 10, 500);
+		SensorType TEMPERATURE = new SensorType("TEMPERATURE", "°C", 17, 22);
+		
 		// Creation fenêtre principale
 		JFrame frame = new JFrame("Capteurs du campus");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(900, 900);
+		frame.setSize(1200, 900); 
 				
 		// Création, paramétrage et positionnement des composants
 		
@@ -84,8 +94,43 @@ public class Project extends JFrame {
 		panel.add(infBound);
 		panel.add(new JLabel("Date fin (secondes)"));
 		panel.add(supBound);
-		panel.add(new JButton("OK"));
+		JButton buttonOk = new JButton("OK");
+		panel.add(buttonOk);
 		
+		buttonOk.addActionListener(new ActionListener(){
+			@Override public void 
+			actionPerformed(ActionEvent e) {
+				String fluid = fluidList.getSelectedItem().toString();
+				switch(fluid) {
+				case "EAU" : 
+					for (Sensor s : EAU.getSensors()) {
+						JCheckBox cac = new JCheckBox(s.getName());
+						panel.add(cac);
+					}
+					break;
+					
+				case "ELECTRICITE" :
+					for (Sensor s : ELECTRICITE.getSensors()) {
+						JCheckBox cac = new JCheckBox(s.getName());
+						panel.add(cac);
+					}
+					break;
+					
+				case "TEMPERATURE" :
+					for (Sensor s : TEMPERATURE.getSensors()) {
+						JCheckBox cac = new JCheckBox(s.getName());
+						panel.add(cac);
+					}
+					break;
+				default : // air comprimé
+					for (Sensor s : AIR.getSensors()) {
+						JCheckBox cac = new JCheckBox(s.getName());
+						panel.add(cac);
+					}
+					break;
+				}
+			}
+		});
 		
 		frame.add(splitVertical);
 
