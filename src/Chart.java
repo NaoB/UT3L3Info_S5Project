@@ -1,6 +1,8 @@
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,31 +26,33 @@ import model.Data;
 
 public class Chart {
 	
-	private Date start;
-	private Date stop;
+	private LocalDateTime start;
+	private LocalDateTime stop;
 	private List<Sensor> sensors;
 	private List<Data> values;
 	
-	public Chart(List<Sensor> sensors, Date start, Date stop, List<Data> data ) {
+	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
+	
+	public Chart(List<Sensor> sensors, LocalDateTime start, LocalDateTime stop, List<Data> data ) {
 		this.sensors=sensors;
 		this.start=start;
 		this.stop=stop;
 		this.values=data;
 	}
 
-	public Date getStart() {
+	public LocalDateTime getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(LocalDateTime start) {
 		this.start = start;
 	}
 
-	public Date getStop() {
+	public LocalDateTime getStop() {
 		return stop;
 	}
 
-	public void setStop(Date stop) {
+	public void setStop(LocalDateTime stop) {
 		this.stop = stop;
 	}
 
@@ -76,8 +80,8 @@ public class Chart {
 		return types;
 	}
 	
-	public ChartPanel show(List <Sensor> sensors, Date start, Date stop,JFrame frame) {
-		JFreeChart chart = ChartFactory.createLineChart("Donnees en fonction du temps","Temps", "Donnees",createCategoryDataset(sensors));
+	public ChartPanel show(List <Sensor> sensors, LocalDateTime start, LocalDateTime stop,JFrame frame) {
+		JFreeChart chart = ChartFactory.createLineChart("Donnees en fonction du temps","Temps", "Donnees",createCategoryDataset(sensors,start,stop));
 		ChartPanel cp = new ChartPanel(chart,true);
 			
 		/*ChartFrame cf = new ChartFrame("Visualisation a posteriori", chart , true);
@@ -86,12 +90,15 @@ public class Chart {
 		return cp;
 	}
 	
-	private static CategoryDataset createCategoryDataset(List<Sensor> sensors) {
+	private static CategoryDataset createCategoryDataset(List<Sensor> sensors, LocalDateTime start, LocalDateTime stop) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		for (Sensor sensor : sensors ) {
 			for (Data data : sensor.getDatas())
 			{
-				dataset.setValue(data.getValue(), sensor.getName() , String.valueOf(data.getMoment().getSecond()));
+				// Si valeur dans l'intervalle de temps choisi par l'utilisateur
+				if(data.getMoment().compareTo(start) >= 0 && data.getMoment().compareTo(stop) <= 0) {
+				dataset.setValue(data.getValue(), sensor.getName() , String.valueOf(data.getMoment().format(formatter)));
+				}
 			}
 		}
 		return dataset;

@@ -3,8 +3,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
+import javax.swing.SpinnerDateModel;
 
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
@@ -63,18 +69,31 @@ public class Project extends JFrame {
 		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
 		
 		// Visualisation a posteriori
-		List<Sensor> sensors = Sensor.fetchAll();
+		//List<Sensor> sensors = Sensor.fetchAll();
+		List<Sensor> sensors = new ArrayList<>();
 		List<Data> list = new ArrayList<>();
 				
 		JLabel label=new JLabel("Visualisation des données a posteriori",JLabel.CENTER);
 		String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
 		JComboBox<String> fluidList = new JComboBox<>(fluids);
-		fluidList.setMaximumSize(new Dimension(50,40));
+		fluidList.setMaximumSize(new Dimension(50,30));
 				
-		JSpinner infBound = new JSpinner();
+		/*JSpinner infBound = new JSpinner();
 		infBound.setMaximumSize(new Dimension(50,40));
 		JSpinner supBound = new JSpinner();
-		supBound.setMaximumSize(new Dimension(50,40));
+		supBound.setMaximumSize(new Dimension(50,40));*/
+		
+		 SpinnerDateModel model = new SpinnerDateModel();
+		 SpinnerDateModel model2 = new SpinnerDateModel();
+		 SimpleDateFormat format;
+		 Calendar cal = Calendar.getInstance();
+	     Date date = cal.getTime();
+		 
+		model.setValue(date);
+	    JSpinner infBound = new JSpinner(model);
+	    JSpinner supBound = new JSpinner(model2);
+	    infBound.setMaximumSize(new Dimension(50,30));
+		supBound.setMaximumSize(new Dimension(50,30));
 
 		JPanel jpanelText = new JPanel();
 		jpanelText.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -88,6 +107,12 @@ public class Project extends JFrame {
 		buttonOk.addActionListener(new ActionListener(){
 			@Override public void 
 			actionPerformed(ActionEvent e) {
+				// Récupérer valeurs temps
+				Date start,stop;
+				start = (Date) infBound.getValue();
+				stop = (Date) supBound.getValue();
+				
+				// Récupérer fluide
 				String fluid = fluidList.getSelectedItem().toString();
 				switch(fluid) {
 				case "EAU" : 
@@ -96,7 +121,8 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
-								showGraphic(frame, sensors, list, panel, cac);
+								sensors.add(s);
+								showGraphic(frame, sensors, list, panel, cac,start,stop);
 							}
 						});
 					}
@@ -107,7 +133,7 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
-								showGraphic(frame, sensors, list, panel, cac);
+								showGraphic(frame, sensors, list, panel, cac,start,stop);
 							}
 						});
 					}
@@ -118,7 +144,7 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
-								showGraphic(frame, sensors, list, panel, cac);
+								showGraphic(frame, sensors, list, panel, cac,start,stop);
 							}
 						});
 					}
@@ -129,7 +155,7 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
-								showGraphic(frame, sensors, list, panel, cac);
+								showGraphic(frame, sensors, list, panel, cac,start,stop);
 							}
 						});
 					}
@@ -168,10 +194,10 @@ public class Project extends JFrame {
 		line2.add(new JLabel("Fluide : "));
 		line2.add(fluidList);
 		line2.add(Box.createHorizontalGlue());
-		line2.add(new JLabel("Date début (secondes) : "));
+		line2.add(new JLabel("Date début : "));
 		line2.add(infBound);
 		line2.add(Box.createHorizontalGlue());
-		line2.add(new JLabel("Date fin (secondes) : "));
+		line2.add(new JLabel("Date fin : "));
 		line2.add(supBound);
 		line2.add(Box.createHorizontalGlue());
 		line2.add(btn);
@@ -183,12 +209,18 @@ public class Project extends JFrame {
 	}
 
 	private static void showGraphic(JFrame frame, List<Sensor> sensors, List<Data> list, JPanel panel,
-			JCheckBox cac) {
+			JCheckBox cac,Date start,Date stop) {
 		if(cac.isSelected()) {
-		Chart chart = new Chart(sensors,new Date(), new Date(),list);
-		ChartPanel chartPanel = chart.show(sensors, new Date(),  new Date(), frame);
-		panel.add(chartPanel);
+			Chart chart = new Chart(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop),list);
+			ChartPanel chartPanel = chart.show(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop), frame);
+			panel.add(chartPanel);
 		}
+	}
+	
+	public static LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
+	    return dateToConvert.toInstant()
+	      .atZone(ZoneId.systemDefault())
+	      .toLocalDateTime();
 	}
 	
 }
