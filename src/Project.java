@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.SpinnerDateModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
@@ -77,11 +79,6 @@ public class Project extends JFrame {
 		String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
 		JComboBox<String> fluidList = new JComboBox<>(fluids);
 		fluidList.setMaximumSize(new Dimension(50,30));
-				
-		/*JSpinner infBound = new JSpinner();
-		infBound.setMaximumSize(new Dimension(50,40));
-		JSpinner supBound = new JSpinner();
-		supBound.setMaximumSize(new Dimension(50,40));*/
 		
 		 SpinnerDateModel model = new SpinnerDateModel();
 		 SpinnerDateModel model2 = new SpinnerDateModel();
@@ -122,6 +119,9 @@ public class Project extends JFrame {
 							@Override public void 
 							actionPerformed(ActionEvent e) {
 								sensors.add(s);
+								if(sensors.size()>3) {
+									JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
+								}
 								showGraphic(frame, sensors, list, panel, cac,start,stop);
 							}
 						});
@@ -133,6 +133,10 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
+								sensors.add(s);
+								if(sensors.size()>3) {
+									JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
+								}
 								showGraphic(frame, sensors, list, panel, cac,start,stop);
 							}
 						});
@@ -144,6 +148,10 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
+								sensors.add(s);
+								if(sensors.size()>3) {
+									JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
+								}
 								showGraphic(frame, sensors, list, panel, cac,start,stop);
 							}
 						});
@@ -155,7 +163,22 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
+								sensors.add(s);
+								if(sensors.size()>3) {
+									JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
+								}
 								showGraphic(frame, sensors, list, panel, cac,start,stop);
+							}
+						});
+						
+						cac.addChangeListener(new ChangeListener(){
+							@Override public void 
+							stateChanged(ChangeEvent e) {
+								if(cac.isSelected()) {
+										
+								}else {
+									
+								}
 							}
 						});
 					}
