@@ -71,9 +71,9 @@ public class Building extends Model {
 		String qs = String.format("SELECT * FROM %s", tableName);
 		if (!params.isEmpty()) qs = qs.concat(" WHERE ");
 		for (Entry<String, ?> param : params.entrySet()) {
-			qs = qs.concat(String.format("%s = '%s' ", param.getKey(), param.getValue().toString()));
+			qs = qs.concat(String.format("%s = '%s' AND ", param.getKey(), param.getValue().toString()));
 		}
-		return query(qs);
+		return query(qs.substring(0, qs.length() - 4));
 	}
 		
 	@Override

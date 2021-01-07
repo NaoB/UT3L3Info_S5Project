@@ -1,13 +1,17 @@
 package sensormanagement;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
@@ -15,6 +19,8 @@ import model.Building;
 import model.Sensor;
 
 class SensorTreeModel implements TreeModel {
+	
+	private List<TreeModelListener> listeners = new ArrayList<>();
 	
 	private DefaultMutableTreeNode root = new DefaultMutableTreeNode();
 	private Map<Building, Map<Floor, List<Sensor>>> allSensors = new HashMap<>();
@@ -69,51 +75,77 @@ class SensorTreeModel implements TreeModel {
 
 	@Override
 	public void addTreeModelListener(TreeModelListener arg0) {
-		// TODO Auto-generated method stub
+		listeners.add(arg0);
 	}
 
 	@Override
 	public Object getChild(Object parent, int index) {
+		System.out.println("===== DEBUG : getChild =====");
 		if (parent instanceof DefaultMutableTreeNode) {
 			// Si c'est la racine on renvoit les batiments
-			return allSensors.keySet().toArray()[index];
+			return Building.fetchAll().get(index);
 		} else if (parent instanceof Building) {
 			// Si c'est un batiment on renvoit les étages
+			SortedSet<Floor> floors = new TreeSet<>();
 			Building building = (Building) parent;
-			return allSensors.get(building).keySet().toArray()[index];
+			for (Sensor sensor : building.getSensors()) {
+				floors.add(new Floor(building, sensor.getFloor()));
+			}
+			return floors.toArray()[index];
 		} else if (parent instanceof Floor) {
 			Floor floor = (Floor) parent;
-			return allSensors.get(floor.getBuilding()).get(floor).get(index);
+			Map<String, String> search = new HashMap<>();
+			search.put("building", floor.getBuilding().getName());
+			search.put("floor", floor.getFloor().toString());
+			return Sensor.search(search).get(index);
 		}
 		return null;
 	}
 
 	@Override
 	public int getChildCount(Object parent) {
+		System.out.println("===== DEBUG : getChildCount =====");
 		if (parent instanceof DefaultMutableTreeNode) {
 			// Si c'est la racine on renvoit les batiments
-			return allSensors.size();
+			return Building.fetchAll().size();
 		} else if (parent instanceof Building) {
 			// Si c'est un batiment on renvoit les étages
-			return allSensors.get((Building) parent).size();
+			SortedSet<Floor> floors = new TreeSet<>();
+			Building building = (Building) parent;
+			for (Sensor sensor : building.getSensors()) {
+				floors.add(new Floor(building, sensor.getFloor()));
+			}
+			return floors.size();
 		} else if (parent instanceof Floor) {
 			Floor floor = (Floor) parent;
-			return allSensors.get(floor.getBuilding()).get(floor).size();
+			Map<String, String> search = new HashMap<>();
+			search.put("building", floor.getBuilding().getName());
+			search.put("floor", floor.getFloor().toString());
+			return Sensor.search(search).size();
 		}
 		return 0;
 	}
 
 	@Override
 	public int getIndexOfChild(Object parent, Object child) {
+		System.out.println("===== DEBUG : getIndexOfChild =====");
 		if (parent instanceof DefaultMutableTreeNode) {
 			// Si c'est la racine on renvoit les batiments
-			return (new ArrayList<>(allSensors.keySet())).indexOf(child);
+			return Building.fetchAll().indexOf(child);
 		} else if (parent instanceof Building) {
 			// Si c'est un batiment on renvoit les étages
-			return (new ArrayList<>(allSensors.get((Building) parent).keySet())).indexOf(child);
+			SortedSet<Floor> floors = new TreeSet<>();
+			Building building = (Building) parent;
+			for (Sensor sensor : building.getSensors()) {
+				floors.add(new Floor(building, sensor.getFloor()));
+			}
+			return floors.headSet((Floor) child).size();
 		} else if (parent instanceof Floor) {
 			Floor floor = (Floor) parent;
-			return allSensors.get(floor.getBuilding()).get(floor).indexOf(child);
+			Map<String, String> search = new HashMap<>();
+			search.put("building", floor.getBuilding().getName());
+			search.put("floor", floor.getFloor().toString());
+			return Sensor.search(search).indexOf(child);
 		}
 		return 0;
 	}
@@ -132,8 +164,7 @@ class SensorTreeModel implements TreeModel {
 
 	@Override
 	public void removeTreeModelListener(TreeModelListener arg0) {
-		// TODO Auto-generated method stub
-		
+		listeners.remove(arg0);		
 	}
 
 	@Override

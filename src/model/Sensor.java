@@ -36,6 +36,16 @@ public class Sensor extends Model {
 		this.max = sensorType.getDefaultMax();
 	}
 	
+	public Sensor(String name, SensorType sensorType, Building building, int floor, String location, float min, float max) {
+		this.name = name;
+		this.sensorType = sensorType;
+		this.building = building;
+		this.floor = floor;
+		this.location = location;
+		this.min = min;
+		this.max = max;
+	}
+	
 	private static Sensor fromResultSet(ResultSet rs) throws SQLException {
 		String name = rs.getString("name");
 		SensorType sensorType = SensorType.find(rs.getString("sensor_type")).get(0);
@@ -46,9 +56,7 @@ public class Sensor extends Model {
 		float value = rs.getFloat("value");
 		float min = rs.getFloat("min");
 		float max = rs.getFloat("max");
-		Sensor s = new Sensor(name, sensorType, building, floor, location);
-		s.setMin(min);
-		s.setMax(max);
+		Sensor s = new Sensor(name, sensorType, building, floor, location, min, max);
 		s.setConnected(connected);
 		s.setValue(value);
 		s.exists = true;
@@ -147,9 +155,9 @@ public class Sensor extends Model {
 		String qs = String.format("SELECT * FROM %s", tableName);
 		if (!params.isEmpty()) qs = qs.concat(" WHERE ");
 		for (Entry<String, ?> param : params.entrySet()) {
-			qs = qs.concat(String.format("%s = '%s' ", param.getKey(), param.getValue().toString()));
+			qs = qs.concat(String.format("%s = '%s' AND ", param.getKey(), param.getValue().toString()));
 		}
-		return query(qs);
+		return query(qs.substring(0, qs.length() - 4));
 	}
 
 	@Override

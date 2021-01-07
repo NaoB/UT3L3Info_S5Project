@@ -46,6 +46,7 @@ public class ClientProcessor implements Runnable{
 //                if (resParts[0].equals("Deconnexion")) {
 //                	closeConnexion = true;
 //                }
+            	System.out.println("[network.ClientProcessor] New message : " + message);
                 parseMessage(message);
             }
                         
