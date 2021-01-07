@@ -91,7 +91,7 @@ public class Project extends JFrame {
 		JPanel jpanelText = new JPanel();
 		jpanelText.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
-		// Panel pour le prï¿½cedent et les graphiques
+		// Panel pour le precedent et les graphiques
 		JPanel panel = new JPanel();
 		JSplitPane splitVertical = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitHorizontal, panel);
 		
@@ -100,57 +100,35 @@ public class Project extends JFrame {
 		buttonOk.addActionListener(new ActionListener(){
 			@Override public void 
 			actionPerformed(ActionEvent e) {
-				// Rï¿½cupï¿½rer valeurs temps
+				// Récupérer valeurs temps
 				Date start,stop;
 				start = (Date) infBound.getValue();
 				stop = (Date) supBound.getValue();
 				
-				// Rï¿½cupï¿½rer fluide
+				// Vider list Sensors
+				//sensors.clear();
+				
+				// Récupérer fluide
 				String fluid = fluidList.getSelectedItem().toString();
-				switch(fluid) {
+				switch(fluid) { // Récupérer et afficher capteurs du fluide sélectionné 
 				case "EAU" : 
 					for (Sensor s : EAU.getSensors()) {
-						JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);		
-						cac.addActionListener(new ActionListener(){
-							@Override public void 
-							actionPerformed(ActionEvent e) {
-								updateGraphic(frame, sensors, panel, start, stop, s, cac);	
-							}
-						});
+						showSensors(frame, sensors, panel, start, stop, s);
 					}
 					break;			
 				case "ELECTRICITE" :
 					for (Sensor s : ELECTRICITE.getSensors()) {
-						JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);		
-						cac.addActionListener(new ActionListener(){
-							@Override public void 
-							actionPerformed(ActionEvent e) {
-								updateGraphic(frame, sensors, panel, start, stop, s, cac);
-							}
-						});
+						showSensors(frame, sensors, panel, start, stop, s);
 					}
 					break;			
 				case "TEMPERATURE" :
 					for (Sensor s : TEMPERATURE.getSensors()) {
-						JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);		
-						cac.addActionListener(new ActionListener(){
-							@Override public void 
-							actionPerformed(ActionEvent e) {
-								updateGraphic(frame, sensors, panel, start, stop, s, cac);	
-							}
-						});		
+						showSensors(frame, sensors, panel, start, stop, s);		
 					}
 					break;
-				default : // air comprimï¿½
+				default : // air comprime
 					for (Sensor s : AIR.getSensors()) {
-						JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);	
-						cac.addActionListener(new ActionListener(){
-							@Override public void 
-							actionPerformed(ActionEvent e) {
-									updateGraphic(frame, sensors, panel, start, stop, s, cac);
-								
-							}
-						});
+						showSensors(frame, sensors, panel, start, stop, s);
 					}
 					break;
 				}
@@ -165,6 +143,17 @@ public class Project extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
+	}
+	
+	private static void showSensors(JFrame frame, List<Sensor> sensors, JPanel panel, Date start, Date stop,
+			Sensor s) {
+		JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);		
+		cac.addActionListener(new ActionListener(){
+			@Override public void 
+			actionPerformed(ActionEvent e) {
+				updateGraphic(frame, sensors, panel, start, stop, s, cac);	
+			}
+		});
 	}
 	
 	private static JCheckBox showCheckBox(JButton buttonOk, JLabel label, JComboBox<String> fluidList,
@@ -228,9 +217,11 @@ public class Project extends JFrame {
 			sensors.remove(s);
 			showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 			panel.add(cac);	
+			panel.revalidate();
+			panel.repaint();
 		}
 		if(sensors.size()>3) {
-			JOptionPane.showMessageDialog(panel, "Attention vous pouvez sï¿½lectionner 3 capteurs maximum ï¿½ la fois ");
+			JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
 		}
 		showGraphic(frame, sensors, panel, cac,start,stop);
 	}
