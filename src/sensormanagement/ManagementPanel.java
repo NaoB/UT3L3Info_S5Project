@@ -8,6 +8,8 @@ import javax.swing.JTree;
 import javax.swing.Timer;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
 import model.Sensor;
@@ -31,8 +33,6 @@ public class ManagementPanel extends JSplitPane {
 		ActionListener action = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				repaint();
-				revalidate();
 				System.out.println("UI updated");
 			}
 		};
