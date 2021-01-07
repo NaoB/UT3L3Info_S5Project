@@ -48,7 +48,7 @@ import sensormanagement.ManagementPanel;
 public class Project extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static final JLabel label=new JLabel("Visualisation des données a posteriori",JLabel.CENTER);
+	private static final JLabel label=new JLabel("Visualisation des donnï¿½es a posteriori",JLabel.CENTER);
 	private static final String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
 	private static final JComboBox<String> fluidList = new JComboBox<>(fluids);
 	private static SpinnerDateModel model = new SpinnerDateModel();
@@ -69,12 +69,7 @@ public class Project extends JFrame {
 		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
 		SensorType AIR = new SensorType("AIRCOMPRIME", "m3/h", 0, 5);
 		SensorType ELECTRICITE = new SensorType("ELECTRICITE", "kWh", 10, 500);
-<<<<<<< HEAD
-		SensorType TEMPERATURE = new SensorType("TEMPERATURE", "°C", 17, 22);
-=======
 		SensorType TEMPERATURE = new SensorType("TEMPERATURE", "ï¿½C", 17, 22);
-		JButton buttonOk = new JButton("OK");
->>>>>>> acc3170 (Mise a jour de l'arbre)
 		
 		// Creation fenï¿½tre principale
 		JFrame frame = new JFrame("Capteurs du campus");
@@ -86,17 +81,7 @@ public class Project extends JFrame {
 		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
 		
 		// Visualisation a posteriori
-<<<<<<< HEAD
 		List<Sensor> sensors = new ArrayList<>();		
-=======
-		//List<Sensor> sensors = Sensor.fetchAll();
-		List<Sensor> sensors = new ArrayList<>();
-		List<Data> list = new ArrayList<>();
-				
-		JLabel label=new JLabel("Visualisation des donnï¿½es a posteriori",JLabel.CENTER);
-		String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
-		JComboBox<String> fluidList = new JComboBox<>(fluids);
->>>>>>> acc3170 (Mise a jour de l'arbre)
 		fluidList.setMaximumSize(new Dimension(50,30));
 		SpinnerDateModel model = new SpinnerDateModel();	 
 		model.setValue(date);
@@ -129,15 +114,7 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
 								updateGraphic(frame, sensors, panel, start, stop, s, cac);	
-=======
-								sensors.add(s);
-								if(sensors.size()>3) {
-									JOptionPane.showMessageDialog(panel, "Attention vous pouvez sï¿½lectionner 3 capteurs maximum ï¿½ la fois ");
-								}
-								showGraphic(frame, sensors, list, panel, cac,start,stop);
->>>>>>> acc3170 (Mise a jour de l'arbre)
 							}
 						});
 					}
@@ -148,15 +125,7 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
 								updateGraphic(frame, sensors, panel, start, stop, s, cac);
-=======
-								sensors.add(s);
-								if(sensors.size()>3) {
-									JOptionPane.showMessageDialog(panel, "Attention vous pouvez sï¿½lectionner 3 capteurs maximum ï¿½ la fois ");
-								}
-								showGraphic(frame, sensors, list, panel, cac,start,stop);
->>>>>>> acc3170 (Mise a jour de l'arbre)
 							}
 						});
 					}
@@ -167,15 +136,7 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
 								updateGraphic(frame, sensors, panel, start, stop, s, cac);	
-=======
-								sensors.add(s);
-								if(sensors.size()>3) {
-									JOptionPane.showMessageDialog(panel, "Attention vous pouvez sï¿½lectionner 3 capteurs maximum ï¿½ la fois ");
-								}
-								showGraphic(frame, sensors, list, panel, cac,start,stop);
->>>>>>> acc3170 (Mise a jour de l'arbre)
 							}
 						});		
 					}
@@ -186,27 +147,8 @@ public class Project extends JFrame {
 						cac.addActionListener(new ActionListener(){
 							@Override public void 
 							actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
 									updateGraphic(frame, sensors, panel, start, stop, s, cac);
 								
-=======
-								sensors.add(s);
-								if(sensors.size()>3) {
-									JOptionPane.showMessageDialog(panel, "Attention vous pouvez sï¿½lectionner 3 capteurs maximum ï¿½ la fois ");
-								}
-								showGraphic(frame, sensors, list, panel, cac,start,stop);
-							}
-						});
-						
-						cac.addChangeListener(new ChangeListener(){
-							@Override public void 
-							stateChanged(ChangeEvent e) {
-								if(cac.isSelected()) {
-										
-								}else {
-									
-								}
->>>>>>> acc3170 (Mise a jour de l'arbre)
 							}
 						});
 					}
@@ -284,7 +226,7 @@ public class Project extends JFrame {
 			panel.add(cac);	
 		}
 		if(sensors.size()>3) {
-			JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
+			JOptionPane.showMessageDialog(panel, "Attention vous pouvez sï¿½lectionner 3 capteurs maximum ï¿½ la fois ");
 		}
 		showGraphic(frame, sensors, panel, cac,start,stop);
 	}
