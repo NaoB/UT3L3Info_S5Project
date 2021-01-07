@@ -48,7 +48,7 @@ import sensormanagement.ManagementPanel;
 public class Project extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static final JLabel label=new JLabel("Visualisation des donnï¿½es a posteriori",JLabel.CENTER);
+	private static final JLabel label=new JLabel("Visualisation des données a posteriori",JLabel.CENTER);
 	private static final String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
 	private static final JComboBox<String> fluidList = new JComboBox<>(fluids);
 	private static SpinnerDateModel model = new SpinnerDateModel();
@@ -189,7 +189,7 @@ public class Project extends JFrame {
 		line2.add(new JLabel("Fluide : "));
 		line2.add(fluidList);
 		line2.add(Box.createHorizontalGlue());
-		line2.add(new JLabel("Date dï¿½but : "));
+		line2.add(new JLabel("Date début : "));
 		line2.add(infBound);
 		line2.add(Box.createHorizontalGlue());
 		line2.add(new JLabel("Date fin : "));
@@ -208,6 +208,8 @@ public class Project extends JFrame {
 			Chart chart = new Chart(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop));
 			ChartPanel chartPanel = chart.show(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop), frame);
 			panel.add(chartPanel);
+			panel.revalidate();
+			panel.repaint();
 		}
 	}
 	
