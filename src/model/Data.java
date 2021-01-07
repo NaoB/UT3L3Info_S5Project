@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,15 @@ public class Data extends Model{
 	}
 	
 	private static Data fromResultSet(ResultSet rs) throws SQLException {
-		LocalDateTime moment = rs.getTimestamp("moment").toLocalDateTime();
+		LocalDateTime moment = rs.getTimestamp("moment").toLocalDateTime().minusHours(1); // -1 heure pour régler le probleme de décalage
 		Sensor sensor = Sensor.find(rs.getString("sensor")).get(0);
+		float value = rs.getFloat("value");
+		return new Data(moment, sensor, value);
+	}
+	
+	private static Data fromResultSet(ResultSet rs, Model owner) throws SQLException {
+		LocalDateTime moment = rs.getTimestamp("moment").toLocalDateTime().minusHours(1);
+		Sensor sensor = (Sensor) owner;
 		float value = rs.getFloat("value");
 		return new Data(moment, sensor, value);
 	}
@@ -46,7 +54,7 @@ public class Data extends Model{
 		}
 		return result;
 	}
-	
+		
 	public LocalDateTime getMoment() {
 		return moment;
 	}
@@ -83,6 +91,20 @@ public class Data extends Model{
 			qs = qs.concat(String.format("%s = '%s' AND ", param.getKey(), param.getValue().toString()));
 		}
 		return query(qs.substring(0, qs.length() - 4));
+	}
+	
+	public static List<Data> belongsTo(Sensor sensor) {
+		String qs = String.format("SELECT * FROM %s WHERE %s = '%s'", tableName, "sensor", sensor.getName());
+		List<Data> result = new ArrayList<>();
+		ResultSet queryResult = Model.select(qs);
+		try {
+			while (queryResult.next()) {
+				result.add(Data.fromResultSet(queryResult, sensor));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override

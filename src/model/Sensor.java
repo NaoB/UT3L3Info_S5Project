@@ -129,9 +129,7 @@ public class Sensor extends Model {
 	}
 	
 	public List<Data> getDatas() {
-		Map<String, String> searchParams = new HashMap<>();
-		searchParams.put("sensor", name);
-		return Data.search(searchParams);
+		return Data.belongsTo(this);
 	}
 	
 	public static List<Sensor> fetchAll() {
