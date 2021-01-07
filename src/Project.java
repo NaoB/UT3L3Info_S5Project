@@ -55,7 +55,6 @@ public class Project extends JFrame {
 	private static SpinnerDateModel model2 = new SpinnerDateModel();
 	private static Calendar cal = Calendar.getInstance();
 	private static Date date = cal.getTime();
-	 
     private static final JSpinner infBound = new JSpinner(model);
     private static final JSpinner supBound = new JSpinner(model2);
     
@@ -71,7 +70,6 @@ public class Project extends JFrame {
 		SensorType AIR = new SensorType("AIRCOMPRIME", "m3/h", 0, 5);
 		SensorType ELECTRICITE = new SensorType("ELECTRICITE", "kWh", 10, 500);
 		SensorType TEMPERATURE = new SensorType("TEMPERATURE", "°C", 17, 22);
-		//JButton buttonOk = new JButton("OK");
 		
 		// Creation fenêtre principale
 		JFrame frame = new JFrame("Capteurs du campus");
@@ -83,21 +81,10 @@ public class Project extends JFrame {
 		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
 		
 		// Visualisation a posteriori
-		List<Sensor> sensors = new ArrayList<>();
-				
-		/*JLabel label=new JLabel("Visualisation des données a posteriori",JLabel.CENTER);
-		String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
-		JComboBox<String> fluidList = new JComboBox<>(fluids);*/
+		List<Sensor> sensors = new ArrayList<>();		
 		fluidList.setMaximumSize(new Dimension(50,30));
-		
-		SpinnerDateModel model = new SpinnerDateModel();
-		SpinnerDateModel model2 = new SpinnerDateModel();
-		/*Calendar cal = Calendar.getInstance();
-	    Date date = cal.getTime();*/
-		 
+		SpinnerDateModel model = new SpinnerDateModel();	 
 		model.setValue(date);
-	    /*JSpinner infBound = new JSpinner(model);
-	    JSpinner supBound = new JSpinner(model2);*/
 	    infBound.setMaximumSize(new Dimension(50,30));
 		supBound.setMaximumSize(new Dimension(50,30));
 
@@ -229,7 +216,6 @@ public class Project extends JFrame {
 	}
 	
 	private static void updateGraphic(JFrame frame, List<Sensor> sensors, JPanel panel, Date start, Date stop, Sensor s, JCheckBox cac) {
-		//if(cac.isSelected()) {
 		if(cac.isSelected()) {
 			sensors.add(s);
 		}
@@ -237,35 +223,12 @@ public class Project extends JFrame {
 			panel.removeAll();
 			sensors.remove(s);
 			showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
-			panel.add(cac);
-			
+			panel.add(cac);	
 		}
-			if(sensors.size()>3) {
-				JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
-			}
-			showGraphic(frame, sensors, panel, cac,start,stop);
-			
-		/*}else {
-			if(sensors.contains(s)) {
-				sensors.remove(Sensor.findOne(cac.getName()));
-			}
-			showGraphic(frame, sensors, list, panel, cac,start,stop);
-		}*/
-	}
-	
-	/*cac.addChangeListener(new ChangeListener(){
-	@Override public void 
-	stateChanged(ChangeEvent e) {
-		if(!cac.isSelected()) {
-			sensors.add(Sensor.findOne(cac.getName()));	
-			panel.removeAll();
-			JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);	
-			showGraphic(frame, sensors, list, panel, cac,start,stop);
-		}else {
-			sensors.remove(Sensor.findOne(cac.getName()));
-			showGraphic(frame, sensors, list, panel, cac,start,stop);
+		if(sensors.size()>3) {
+			JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
 		}
+		showGraphic(frame, sensors, panel, cac,start,stop);
 	}
-});*/
 	
 }
