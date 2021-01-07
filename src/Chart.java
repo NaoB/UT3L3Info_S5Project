@@ -29,15 +29,13 @@ public class Chart {
 	private LocalDateTime start;
 	private LocalDateTime stop;
 	private List<Sensor> sensors;
-	private List<Data> values;
 	
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
 	
-	public Chart(List<Sensor> sensors, LocalDateTime start, LocalDateTime stop, List<Data> data ) {
+	public Chart(List<Sensor> sensors, LocalDateTime start, LocalDateTime stop) {
 		this.sensors=sensors;
 		this.start=start;
 		this.stop=stop;
-		this.values=data;
 	}
 
 	public LocalDateTime getStart() {
@@ -62,14 +60,6 @@ public class Chart {
 
 	public void setSensors(List<Sensor> sensors) {
 		this.sensors = sensors;
-	}
-
-	public List<Data> getValues() {
-		return values;
-	}
-
-	public void setValues(List<Data> values) {
-		this.values = values;
 	}
 
 	public List<SensorType> getSensorType() {
