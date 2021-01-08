@@ -100,14 +100,14 @@ public class Project extends JFrame {
 		buttonOk.addActionListener(new ActionListener(){
 			@Override public void 
 			actionPerformed(ActionEvent e) {
+				// Vider list Sensors
+				sensors.clear();
+				
 				// Récupérer valeurs temps
 				Date start,stop;
 				start = (Date) infBound.getValue();
 				stop = (Date) supBound.getValue();
-				
-				// Vider list Sensors
-				//sensors.clear();
-				
+	
 				// Récupérer fluide
 				String fluid = fluidList.getSelectedItem().toString();
 				switch(fluid) { // Récupérer et afficher capteurs du fluide sélectionné 
@@ -139,7 +139,7 @@ public class Project extends JFrame {
 		//frame.add(new RealTimePanel());
 		splitHorizontal.setDividerLocation(frame.getHeight() / 2);
 		splitVertical.setDividerLocation(frame.getWidth() / 2);
-		
+	
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
