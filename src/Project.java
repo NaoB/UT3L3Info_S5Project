@@ -112,24 +112,16 @@ public class Project extends JFrame {
 				String fluid = fluidList.getSelectedItem().toString();
 				switch(fluid) { // Récupérer et afficher capteurs du fluide sélectionné 
 				case "EAU" : 
-					for (Sensor s : EAU.getSensors()) {
-						showSensors(frame, sensors, panel, start, stop, s);
-					}
+					findSensorsByFLuid(EAU, frame, sensors, panel, start, stop);
 					break;			
 				case "ELECTRICITE" :
-					for (Sensor s : ELECTRICITE.getSensors()) {
-						showSensors(frame, sensors, panel, start, stop, s);
-					}
+					findSensorsByFLuid(ELECTRICITE, frame, sensors, panel, start, stop);
 					break;			
 				case "TEMPERATURE" :
-					for (Sensor s : TEMPERATURE.getSensors()) {
-						showSensors(frame, sensors, panel, start, stop, s);		
-					}
+					findSensorsByFLuid(TEMPERATURE, frame, sensors, panel, start, stop);
 					break;
 				default : // air comprime
-					for (Sensor s : AIR.getSensors()) {
-						showSensors(frame, sensors, panel, start, stop, s);
-					}
+					findSensorsByFLuid(AIR, frame, sensors, panel, start, stop);
 					break;
 				}
 			}
@@ -143,6 +135,21 @@ public class Project extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
+	}
+	
+	private static void findSensorsByFLuid(SensorType type, JFrame frame, List<Sensor> sensors, JPanel panel,
+			Date start, Date stop) {
+		if(type.getSensors().isEmpty()) {
+			panel.removeAll();
+			showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
+			panel.add(new JLabel("Aucun capteur trouvé pour ce fluide"));
+			panel.revalidate();
+			panel.repaint();
+		}else {
+			for (Sensor s : type.getSensors()) {
+				showSensors(frame, sensors, panel, start, stop, s);
+			}
+		}
 	}
 	
 	private static void showSensors(JFrame frame, List<Sensor> sensors, JPanel panel, Date start, Date stop,
