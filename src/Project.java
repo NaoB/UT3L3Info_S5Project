@@ -206,18 +206,6 @@ public class Project extends JFrame {
 		panel.add(line2);
 	}
 
-	private static void showGraphic(JFrame frame, List<Sensor> sensors, JPanel panel,List<JCheckBox> cac,Date start,Date stop) {
-		for(JCheckBox cb : cac) {
-			if(cb.isSelected()) {
-				Chart chart = new Chart(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop));
-				ChartPanel chartPanel = chart.show(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop), frame);
-				panel.add(chartPanel);
-				panel.revalidate();
-				panel.repaint();
-			}
-		}
-	}
-	
 	public static LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
 	    return dateToConvert.toInstant()
 	      .atZone(ZoneId.systemDefault())
@@ -231,6 +219,11 @@ public class Project extends JFrame {
 		else {
 			panel.removeAll();
 			sensors.remove(s);
+			if(sensors.size()<3) {
+				for(JCheckBox cb : checkBoxes) {
+					cb.setEnabled(true);
+				}
+			}
 			showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
 			for(JCheckBox cb : checkBoxes) {
 				panel.add(cb);
@@ -238,10 +231,20 @@ public class Project extends JFrame {
 			panel.revalidate();
 			panel.repaint();
 		}
-		if(sensors.size()>3) {
+		if(sensors.size()==3) {
 			JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
+			for(JCheckBox cb : checkBoxes) {
+				if(!cb.isSelected()) {
+					cb.setEnabled(false);;
+				}
+			}
 		}
-		showGraphic(frame, sensors, panel, checkBoxes,start,stop);
+		
+		Chart chart = new Chart(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop));
+		ChartPanel chartPanel = chart.show(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop), frame);
+		panel.add(chartPanel);
+		panel.revalidate();
+		panel.repaint();
 	}
 	
 }
