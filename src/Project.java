@@ -57,6 +57,7 @@ public class Project extends JFrame {
 	private static Date date = cal.getTime();
     private static final JSpinner infBound = new JSpinner(model);
     private static final JSpinner supBound = new JSpinner(model2);
+    private static List<JCheckBox> checkBoxes = new ArrayList<>();	
     
     private static final JButton buttonOk = new JButton("OK");
 	
@@ -69,7 +70,7 @@ public class Project extends JFrame {
 		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
 		SensorType AIR = new SensorType("AIRCOMPRIME", "m3/h", 0, 5);
 		SensorType ELECTRICITE = new SensorType("ELECTRICITE", "kWh", 10, 500);
-		SensorType TEMPERATURE = new SensorType("TEMPERATURE", "ï¿½C", 17, 22);
+		SensorType TEMPERATURE = new SensorType("TEMPERATURE", "°C", 17, 22);
 		
 		// Creation fenï¿½tre principale
 		JFrame frame = new JFrame("Capteurs du campus");
@@ -81,7 +82,8 @@ public class Project extends JFrame {
 		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
 		
 		// Visualisation a posteriori
-		List<Sensor> sensors = new ArrayList<>();		
+		List<Sensor> sensors = new ArrayList<>();	
+		
 		fluidList.setMaximumSize(new Dimension(50,30));
 		SpinnerDateModel model = new SpinnerDateModel();	 
 		model.setValue(date);
@@ -102,6 +104,7 @@ public class Project extends JFrame {
 			actionPerformed(ActionEvent e) {
 				// Vider list Sensors
 				sensors.clear();
+				checkBoxes.clear();
 				
 				// Récupérer valeurs temps
 				Date start,stop;
@@ -154,7 +157,8 @@ public class Project extends JFrame {
 	
 	private static void showSensors(JFrame frame, List<Sensor> sensors, JPanel panel, Date start, Date stop,
 			Sensor s) {
-		JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);		
+		JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, panel, s);	
+		checkBoxes.add(cac);
 		cac.addActionListener(new ActionListener(){
 			@Override public void 
 			actionPerformed(ActionEvent e) {
@@ -166,9 +170,12 @@ public class Project extends JFrame {
 	private static JCheckBox showCheckBox(JButton buttonOk, JLabel label, JComboBox<String> fluidList,
 			JSpinner infBound, JSpinner supBound, JPanel panel, Sensor s) {
 		JCheckBox cac = new JCheckBox(s.getName());
+		checkBoxes.add(cac);
 		panel.removeAll();
 		showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
-		panel.add(cac);
+		for(JCheckBox cb : checkBoxes) {
+			panel.add(cb);
+		}
 		panel.revalidate();
 		panel.repaint();
 		return cac;
@@ -199,13 +206,15 @@ public class Project extends JFrame {
 		panel.add(line2);
 	}
 
-	private static void showGraphic(JFrame frame, List<Sensor> sensors, JPanel panel,JCheckBox cac,Date start,Date stop) {
-		if(cac.isSelected()) {
-			Chart chart = new Chart(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop));
-			ChartPanel chartPanel = chart.show(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop), frame);
-			panel.add(chartPanel);
-			panel.revalidate();
-			panel.repaint();
+	private static void showGraphic(JFrame frame, List<Sensor> sensors, JPanel panel,List<JCheckBox> cac,Date start,Date stop) {
+		for(JCheckBox cb : cac) {
+			if(cb.isSelected()) {
+				Chart chart = new Chart(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop));
+				ChartPanel chartPanel = chart.show(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop), frame);
+				panel.add(chartPanel);
+				panel.revalidate();
+				panel.repaint();
+			}
 		}
 	}
 	
@@ -223,14 +232,16 @@ public class Project extends JFrame {
 			panel.removeAll();
 			sensors.remove(s);
 			showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
-			panel.add(cac);	
+			for(JCheckBox cb : checkBoxes) {
+				panel.add(cb);
+			}
 			panel.revalidate();
 			panel.repaint();
 		}
 		if(sensors.size()>3) {
 			JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
 		}
-		showGraphic(frame, sensors, panel, cac,start,stop);
+		showGraphic(frame, sensors, panel, checkBoxes,start,stop);
 	}
 	
 }
