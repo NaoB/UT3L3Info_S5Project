@@ -217,8 +217,9 @@ public class Project extends JFrame {
 			sensors.add(s);
 		}
 		else {
-			panel.removeAll();
 			sensors.remove(s);
+		}
+			panel.removeAll();
 			if(sensors.size()<3) {
 				for(JCheckBox cb : checkBoxes) {
 					cb.setEnabled(true);
@@ -230,12 +231,13 @@ public class Project extends JFrame {
 			}
 			panel.revalidate();
 			panel.repaint();
-		}
+		//}
+		
 		if(sensors.size()==3) {
 			JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
 			for(JCheckBox cb : checkBoxes) {
 				if(!cb.isSelected()) {
-					cb.setEnabled(false);;
+					cb.setEnabled(false);
 				}
 			}
 		}
