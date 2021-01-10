@@ -72,13 +72,13 @@ public class Project extends JFrame {
 		SensorType ELECTRICITE = new SensorType("ELECTRICITE", "kWh", 10, 500);
 		SensorType TEMPERATURE = new SensorType("TEMPERATURE", "°C", 17, 22);
 		
-		// Creation fenï¿½tre principale
+		// Creation fenetre principale
 		JFrame frame = new JFrame("Capteurs du campus");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1200, 900); 
 				
-		// Crï¿½ation, paramï¿½trage et positionnement des composants
-		// Panel pour les deux blocs ï¿½ gauche (Temps Reel et Gestion)
+		// Creation, parametrage et positionnement des composants
+		// Panel pour les deux blocs a gauche (Temps Reel et Gestion)
 		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
 		
 		// Visualisation a posteriori
@@ -199,8 +199,7 @@ public class Project extends JFrame {
 		line2.add(supBound);
 		line2.add(Box.createHorizontalGlue());
 		line2.add(btn);
-		
-		
+			
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 		panel.add(line1);
 		panel.add(line2);
@@ -215,23 +214,22 @@ public class Project extends JFrame {
 	private static void updateGraphic(JFrame frame, List<Sensor> sensors, JPanel panel, Date start, Date stop, Sensor s, JCheckBox cac) {
 		if(cac.isSelected()) {
 			sensors.add(s);
-		}
-		else {
+		}else {
 			sensors.remove(s);
 		}
-			panel.removeAll();
-			if(sensors.size()<3) {
-				for(JCheckBox cb : checkBoxes) {
-					cb.setEnabled(true);
-				}
-			}
-			showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
+		
+		panel.removeAll();
+		if(sensors.size()<3) {
 			for(JCheckBox cb : checkBoxes) {
-				panel.add(cb);
+				cb.setEnabled(true);
 			}
-			panel.revalidate();
-			panel.repaint();
-		//}
+		}
+		showBasicPanel(label, fluidList, infBound, supBound, panel,buttonOk);
+		for(JCheckBox cb : checkBoxes) {
+			panel.add(cb);
+		}
+		panel.revalidate();
+		panel.repaint();
 		
 		if(sensors.size()==3) {
 			JOptionPane.showMessageDialog(panel, "Attention vous pouvez sélectionner 3 capteurs maximum à la fois ");
@@ -241,12 +239,10 @@ public class Project extends JFrame {
 				}
 			}
 		}
-		
 		Chart chart = new Chart(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop));
 		ChartPanel chartPanel = chart.show(sensors,convertToLocalDateTimeViaInstant(start),convertToLocalDateTimeViaInstant(stop), frame);
 		panel.add(chartPanel);
 		panel.revalidate();
 		panel.repaint();
 	}
-	
 }
