@@ -1,20 +1,13 @@
+package graphic;
+
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Container;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
-
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
@@ -70,13 +63,9 @@ public class Chart {
 		return types;
 	}
 	
-	public ChartPanel show(List <Sensor> sensors, LocalDateTime start, LocalDateTime stop,JFrame frame) {
+	public ChartPanel show(List <Sensor> sensors, LocalDateTime start, LocalDateTime stop,Container frame) {
 		JFreeChart chart = ChartFactory.createLineChart("Donnees en fonction du temps","Temps", "Donnees",createCategoryDataset(sensors,start,stop));
 		ChartPanel cp = new ChartPanel(chart,true);
-			
-		/*ChartFrame cf = new ChartFrame("Visualisation a posteriori", chart , true);
-		cf.setVisible(true);*/
-		
 		return cp;
 	}
 	
