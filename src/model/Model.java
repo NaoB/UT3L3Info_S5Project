@@ -7,6 +7,8 @@ import java.sql.Statement;
 
 abstract class Model {
 	
+	private static boolean DEBUG = false;
+	
 	protected boolean exists = false;
 	
 	protected abstract String getInsertSQL();
@@ -19,12 +21,12 @@ abstract class Model {
 			if (!exists) {
 				query = this.getInsertSQL();
 				stmt.executeUpdate(query);
-				System.out.println("SQL : " + query);
+				if (DEBUG) System.out.println("[model.Model] SQL Update : " + query);
 				exists = true;
 			} else if (this.getUpdateSQL() != null){
 				query = this.getUpdateSQL();
 				stmt.executeUpdate(query);
-				System.out.println("SQL : " + query);
+				if (DEBUG) System.out.println("[model.Model] SQL Update : " + query);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -32,13 +34,13 @@ abstract class Model {
 	}
 	
 	protected static ResultSet select(String query) {
-		System.out.println("SQL : " + query);
 		ResultSet result = null;
 		Connection connect = Database.getInstance().getConnection();
 		Statement stmt;
 		try {
 			stmt = connect.createStatement();
 			result = stmt.executeQuery(query);
+			if (DEBUG) System.out.println("[model.Model] SQL Query : " + query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

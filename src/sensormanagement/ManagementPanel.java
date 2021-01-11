@@ -33,6 +33,16 @@ public class ManagementPanel extends JSplitPane {
 		ActionListener action = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				/**
+				 * Repaint() ça permet de mettre à jour le tree, mais les détails sont pas mis à jour,
+				 * il faut mettre les getChild en cache sinon c'est la merde (et éventuellement invalider le cache
+				 * dans la fonction ici)
+				 * faut trouver un moyent de mettre à jour les détails (peut-etre refaire un get du capteur)
+				 * sinon c'est pas mal, bon courage !
+				 */
+				((SensorTreeModel) tree.getModel()).clearCache();
+				repaint();
+				revalidate();
 				System.out.println("UI updated");
 			}
 		};
