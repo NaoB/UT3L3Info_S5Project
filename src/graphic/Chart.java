@@ -83,7 +83,4 @@ public class Chart {
 		return dataset;
 	}
 	
-	public void clear(JFrame frame, Component comp) {
-		frame.remove(comp);
-	}
 }
