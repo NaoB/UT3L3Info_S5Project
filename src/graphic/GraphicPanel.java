@@ -59,7 +59,7 @@ public class GraphicPanel extends JPanel {
 	    infBound.setMaximumSize(new Dimension(50,30));
 		supBound.setMaximumSize(new Dimension(50,30));
 		
-		showBasicPanel(label, fluidList, infBound, supBound,buttonOk);
+		showBasicPanel();
 		
 		buttonOk.addActionListener(new ActionListener(){
 			@Override public void 
@@ -77,16 +77,16 @@ public class GraphicPanel extends JPanel {
 				String fluid = fluidList.getSelectedItem().toString();
 				switch(fluid) { // Récupérer et afficher capteurs du fluide sélectionné 
 				case "EAU" : 
-					findSensorsByFLuid(EAU,getParent(), sensors, start, stop);
+					findSensorsByFLuid(EAU,getParent(), start, stop);
 					break;			
 				case "ELECTRICITE" :
-					findSensorsByFLuid(ELECTRICITE, getParent(), sensors, start, stop);
+					findSensorsByFLuid(ELECTRICITE, getParent(), start, stop);
 					break;			
 				case "TEMPERATURE" :
-					findSensorsByFLuid(TEMPERATURE, getParent(), sensors, start, stop);
+					findSensorsByFLuid(TEMPERATURE, getParent(), start, stop);
 					break;
 				default : // air comprime
-					findSensorsByFLuid(AIR, getParent(), sensors, start, stop);
+					findSensorsByFLuid(AIR, getParent(), start, stop);
 					break;
 				}
 			}
@@ -94,36 +94,36 @@ public class GraphicPanel extends JPanel {
 		
 	}
 
-	private void findSensorsByFLuid(SensorType type, Container frame, List<Sensor> sensors,Date start, Date stop) {
+	private void findSensorsByFLuid(SensorType type, Container frame,Date start, Date stop) {
 		if(type.getSensors().isEmpty()) {
 			this.removeAll();
-			showBasicPanel(label, fluidList, infBound, supBound,buttonOk);
+			showBasicPanel();
 			this.add(new JLabel("Aucun capteur trouvé pour ce fluide"));
 			this.revalidate();
 			this.repaint();
 		}else {
 			for (Sensor s : type.getSensors()) {
-				showSensors(frame, sensors, start, stop, s);
+				showSensors(frame, start, stop, s);
 			}
 		}
 	}
 		
-	private void showSensors(Container frame, List<Sensor> sensors, Date start, Date stop,Sensor s) {
-		JCheckBox cac = showCheckBox(buttonOk, label, fluidList, infBound, supBound, s);	
+	private void showSensors(Container frame, Date start, Date stop,Sensor s) {
+		JCheckBox cac = showCheckBox(s);	
 		checkBoxes.add(cac);
 		cac.addActionListener(new ActionListener(){
 			@Override public void 
 			actionPerformed(ActionEvent e) {
-				updateGraphic(frame, sensors,start, stop, s, cac);	
+				updateGraphic(frame,start, stop, s, cac);	
 			}
 		});
 	}
 		
-	private JCheckBox showCheckBox(JButton buttonOk, JLabel label, JComboBox<String> fluidList, JSpinner infBound, JSpinner supBound,Sensor s) {
+	private JCheckBox showCheckBox(Sensor s) {
 		JCheckBox cac = new JCheckBox(s.getName());
 		checkBoxes.add(cac);
 		this.removeAll();
-		showBasicPanel(label, fluidList, infBound, supBound,buttonOk);
+		showBasicPanel();
 		for(JCheckBox cb : checkBoxes) {
 			this.add(cb);
 		}
@@ -132,7 +132,7 @@ public class GraphicPanel extends JPanel {
 		return cac;
 	}
 
-	private void showBasicPanel(JLabel label, JComboBox<String> fluidList, JSpinner infBound,JSpinner supBound,JButton btn) {
+	private void showBasicPanel() {
 		Box line1=new Box(BoxLayout.X_AXIS);
 		line1.add(Box.createHorizontalGlue());
 		line1.add(label);
@@ -148,7 +148,7 @@ public class GraphicPanel extends JPanel {
 		line2.add(new JLabel("Date fin : "));
 		line2.add(supBound);
 		line2.add(Box.createHorizontalGlue());
-		line2.add(btn);
+		line2.add(buttonOk);
 				
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		this.add(line1);
@@ -161,7 +161,7 @@ public class GraphicPanel extends JPanel {
 		      .toLocalDateTime();
 	}
 		
-	private void updateGraphic(Container frame, List<Sensor> sensors, Date start, Date stop, Sensor s, JCheckBox cac) {
+	private void updateGraphic(Container frame,Date start, Date stop, Sensor s, JCheckBox cac) {
 		if(cac.isSelected()) {
 			sensors.add(s);
 		}else {
@@ -174,7 +174,7 @@ public class GraphicPanel extends JPanel {
 				cb.setEnabled(true);
 			}
 		}
-		showBasicPanel(label, fluidList, infBound, supBound,buttonOk);
+		showBasicPanel();
 		for(JCheckBox cb : checkBoxes) {
 			this.add(cb);
 		}
