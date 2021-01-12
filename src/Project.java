@@ -3,6 +3,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import graphic.GraphicPanel;
+import realtime.RealTimePanel;
 
 import network.Server;
 import sensormanagement.ManagementPanel;
@@ -23,7 +24,7 @@ public class Project extends JFrame {
 				
 		// Creation, parametrage et positionnement des composants
 		// Panel pour les deux blocs a gauche (Temps Reel et Gestion)
-		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JPanel(), new ManagementPanel());
+		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new RealTimePanel(), new ManagementPanel());
 		
 		// Visualisation a posteriori	
 

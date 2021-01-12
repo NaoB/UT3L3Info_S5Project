@@ -85,7 +85,7 @@ public class RealTimePanel extends JPanel {
 		 for (int i = 0; i < 6; i++) {
 		     dataTable.getColumnModel().getColumn(i).setCellRenderer(renderer);
 		 }
-		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
+		SensorType EAU = new SensorType("EAU", "m3", 1, 10);
 		Building bat1 = new Building("Batiment 1");
 		updateBuildings(new String[] {bat1.getName()});
 
@@ -141,9 +141,9 @@ public class RealTimePanel extends JPanel {
 		else {
 			String alert = "ATTENTION";
 			if(alerts.size() > 1)
-				alert += "LES CAPTEURS "+alerts.toString()+" ONT DES VALEURS ANORMALES";
+				alert += " LES CAPTEURS "+alerts.toString()+" ONT DES VALEURS ANORMALES";
 			else
-				alert+= "LE CAPTEUR" + alerts.toString()+" A UNE VALEUR ANORMALE";
+				alert+= " LE CAPTEUR" + alerts.toString()+" A UNE VALEUR ANORMALE";
 			alertLabel.setText(alert);
 			alertLabel.setForeground(Color.red);
 			alertLabel.setFont(new Font("Verdana",Font.BOLD,20));

@@ -27,21 +27,17 @@ public class RealTimeController implements ActionListener {
 				panel.updateBuildings(buildings);
 				panel.toggleFilter();
 				state = FilterEnum.BUILDING;
-				System.out.println("Lel");
 			}
 			else {
 				panel.toggleFilter();
 				state = FilterEnum.SENSOR_TYPE;
-				System.out.println("lul");
 			}
 		}
 		if(b instanceof JComboBox<?>) {
 			@SuppressWarnings("unchecked")
 			JComboBox<String> j = (JComboBox<String>) b;
-			System.out.println("hey");
 			if(j.getItemAt(0)!=null) {
 				panel.filter();
-				System.out.println("Ho");
 			}
 		}
 
