@@ -8,7 +8,6 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -19,9 +18,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class RealTimePanel extends JPanel {
 	private JComboBox<String> dataFilter;
@@ -29,8 +30,14 @@ public class RealTimePanel extends JPanel {
 	private JLabel alertLabel=new JLabel("",SwingConstants.CENTER);
 	private Set<Integer> alerts = new HashSet<>();
 	private DataModel dataModel;
-	
+	private final String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
+	private String[] buildings;
+	JRadioButton bat = new JRadioButton("Batiment",true);
+	JRadioButton fluide = new JRadioButton("Fluide",false);
+	TableRowSorter<DataModel> sorter;   
+
 	public RealTimePanel() {
+		RealTimeController c = new RealTimeController(this);
 		JPanel main = new JPanel();
 		main.setLayout(new BorderLayout());
 		this.add(main);
@@ -51,14 +58,16 @@ public class RealTimePanel extends JPanel {
 
 		selecteur.add(labels, BorderLayout.NORTH);
 		dataFilter = new JComboBox<>();
+		dataFilter.addActionListener(c);
 
 		selecteur.add(dataFilter,BorderLayout.WEST);
 		ButtonGroup typeFilter = new ButtonGroup();
-		JRadioButton bat = new JRadioButton("Batiment",true);
-		JRadioButton fluide = new JRadioButton("Fluide",false);
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(2,1));
-
+		bat.addActionListener(c);
+		fluide.addActionListener(c);
+		bat.setEnabled(false);
+		fluide.setEnabled(true);
 		typeFilter.add(bat);
 		typeFilter.add(fluide);
 		buttons.add(bat);
@@ -69,18 +78,53 @@ public class RealTimePanel extends JPanel {
 		main.add(north,BorderLayout.NORTH);
 		dataModel = new DataModel();
 		dataTable = new JTable(dataModel);
+
+
 		DataTableCellRenderer renderer = new DataTableCellRenderer();
 		 for (int i = 0; i < 6; i++) {
 		     dataTable.getColumnModel().getColumn(i).setCellRenderer(renderer);
 		 }
 		SensorType EAU = new SensorType("EAU", "m3", 0, 10);
 		Building bat1 = new Building("Batiment 1");
+		updateBuildings(new String[] {bat1.getName()});
+
 		afficherDonnees(new Sensor[] {new Sensor("Capteur 1", EAU, bat1, 1, "Salle201"),new Sensor("Capteur 2", EAU, bat1, 1, "Salle201"),new Sensor("Capteur 3", EAU, bat1, 1, "Salle201")});
 
 		JScrollPane scrollPane= new  JScrollPane(dataTable);
 		main.add(scrollPane,BorderLayout.CENTER);
-
 		main.add(alertLabel,BorderLayout.SOUTH);
+		sorter= new TableRowSorter<DataModel>(dataModel);
+		dataTable.setRowSorter(sorter);
+		for (int i = 0; i < 6; i++) {
+			sorter.setSortable(i, false);
+		}
+		toggleFilter();
+	}
+
+
+	public void toggleFilter() {
+		dataFilter.removeAllItems();
+		if(bat.isSelected()) {
+			for (int i = 0; i < buildings.length; i++) {
+				dataFilter.addItem(buildings[i]);
+			}
+			bat.setEnabled(false);
+			fluide.setEnabled(true);
+		}
+		else {
+			for (int i = 0; i < fluids.length; i++) {
+				dataFilter.addItem(fluids[i]);
+			}
+			bat.setEnabled(true);
+			fluide.setEnabled(false);
+
+		}
+		filter();
+	}
+
+
+	public void updateBuildings(String[] buildings) {
+		this.buildings=buildings;
 	}
 
 
@@ -106,15 +150,23 @@ public class RealTimePanel extends JPanel {
 		}
 
 	}
+	
+	public void filter() {
+		if(bat.isSelected())
+			sorter.setRowFilter(RowFilter.regexFilter(dataFilter.getSelectedItem().toString(), 2));
+		else
+			sorter.setRowFilter(RowFilter.regexFilter(dataFilter.getSelectedItem().toString(), 1));
+	}
 
 
 
 	static class DataModel extends DefaultTableModel {
-		private final Object col[] = {"Capteur","Type Fluide","Bâtiment","Etage","Piece","Valeur"};
+		private final String col[] = {"Capteur","Type Fluide","Bâtiment","Etage","Piece","Valeur"};
 		private List<Sensor> data =new ArrayList<>();
 		private HashMap<Integer,Color> colors = new HashMap<>();
 		int n = 0;
 		@Override
+		
 		public int getColumnCount() {
 			return 6;
 		}
@@ -154,6 +206,10 @@ public class RealTimePanel extends JPanel {
 			return colors.get(row);
 		}
 		
+		public String getColumnName(int columnIndex) {
+	        return col[columnIndex];
+	    }
+		
 		public Object getValueAt(int rowIndex, int columnIndex) {
 	        switch(columnIndex){
 	            case 0:
@@ -169,7 +225,7 @@ public class RealTimePanel extends JPanel {
 	            case 5:
 	            	return data.get(rowIndex).getValue();
 	            default:
-	                return null; //Ne devrait jamais arriver
+	                return null;
 	        }
 	    }
 	}
