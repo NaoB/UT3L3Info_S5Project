@@ -1,11 +1,15 @@
 package sensormanagement;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeModel;
@@ -21,16 +25,31 @@ public class ManagementPanel extends JSplitPane {
 	// Composants visuels
 	private JTree tree;
 	private DetailsPanel details;
-	
-	private int delay = 2000;
+	private JPanel treeContainer;
 	
 	public ManagementPanel() {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		
+		ActionListener onRefreshClick = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Refreshing tree...");
+				refreshTree();
+			}
+		};
+		
 		createTree();
-		this.add(tree);
+		treeContainer = new JPanel(new BorderLayout());
+		treeContainer.setBorder(new EmptyBorder(5, 5, 5, 5));
+		JButton refreshButton = new JButton("Rafraichir");
+		refreshButton.addActionListener(onRefreshClick);
+		treeContainer.add(tree, BorderLayout.PAGE_START);
+		treeContainer.add(refreshButton, BorderLayout.PAGE_END);
+		this.add(treeContainer);
 		createDetails();
 		this.add(details);
+		
+		
 	}
 	
 	private void createTree() {
@@ -57,7 +76,10 @@ public class ManagementPanel extends JSplitPane {
 	}
 	
 	private void refreshTree() {
-		this.remove(tree);
+		treeContainer.remove(tree);
 		createTree();
+		treeContainer.add(tree, BorderLayout.PAGE_START);
+		revalidate();
+		repaint();
 	}
 }

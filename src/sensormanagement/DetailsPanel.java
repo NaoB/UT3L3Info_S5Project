@@ -6,10 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
 
 import model.Sensor;
 
@@ -33,9 +36,25 @@ public class DetailsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Modify button clicked");
-				JOptionPane.showInputDialog(that, "Modifier la borne inferieure pour le capteur", "Modification du capteur", JOptionPane.QUESTION_MESSAGE);
-				JOptionPane.showInputDialog(that, "Modifier la borne superieure pour le capteur", "Modification du capteur", JOptionPane.QUESTION_MESSAGE);
+				JTextField minTxt = new JTextField(5);
+				JTextField maxTxt = new JTextField(5);
+				minTxt.setText(String.valueOf(sensor.getMin()));
+				maxTxt.setText(String.valueOf(sensor.getMax()));
 
+			    JPanel dialogPanel = new JPanel();
+			    dialogPanel.add(new JLabel("Min:"));
+			    dialogPanel.add(minTxt);
+			    dialogPanel.add(new JLabel("Max:"));
+			    dialogPanel.add(maxTxt);
+			    int result = JOptionPane.showConfirmDialog(that, dialogPanel, "Entrez les bornes pour les valeurs du capteur", JOptionPane.OK_CANCEL_OPTION);
+			    if (result == JOptionPane.OK_OPTION) {
+			    	float min = Float.valueOf(minTxt.getText());
+			    	float max = Float.valueOf(maxTxt.getText());
+			    	sensor.setMin(min);
+			    	sensor.setMax(max);
+			    	sensor.save();
+			    	JOptionPane.showMessageDialog(that, "Les bornes du capteur ont été modifiées");
+			    }
 			}
 		};
 		
@@ -67,6 +86,7 @@ public class DetailsPanel extends JPanel {
 	}
 
 	private void layoutSetup() {
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setLayout(new GridLayout(8,2));
 		
 		add(new JLabel("Nom :"));
