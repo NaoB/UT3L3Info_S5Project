@@ -2,9 +2,14 @@ package sensormanagement;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import model.Sensor;
 
@@ -14,9 +19,42 @@ public class DetailsPanel extends JPanel {
 	
 	private Sensor sensor;
 	
+	private int delay = 1000;
+
+	private ActionListener onModifyBtnClick;
+	private ActionListener onRefreshTimer;
+	
 	public DetailsPanel() {
 		super();
 		layoutSetup();
+		Component that = this;
+		
+		onModifyBtnClick = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Modify button clicked");
+				JOptionPane.showInputDialog(that, "Modifier la borne inferieure pour le capteur", "Modification du capteur", JOptionPane.QUESTION_MESSAGE);
+				JOptionPane.showInputDialog(that, "Modifier la borne superieure pour le capteur", "Modification du capteur", JOptionPane.QUESTION_MESSAGE);
+
+			}
+		};
+		
+		onRefreshTimer = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (sensor != null) {
+					System.out.println("Update details panel");
+					sensor = Sensor.findOne(sensor.getName());
+					removeAll();
+					layoutSetup();
+					revalidate();
+					repaint();
+				}
+			}
+		};
+		
+		Timer refreshTimer = new Timer(delay, onRefreshTimer);
+		refreshTimer.start();
 	}
 	
 	public void setSensor(Sensor sensor) {
@@ -55,9 +93,12 @@ public class DetailsPanel extends JPanel {
 		add(sensorModify());
 	}
 
+	
 	private Component sensorModify() {
 		if (sensor != null) {
-			return new JButton("Modifier");
+			JButton modifyBtn = new JButton("Modifier");
+			modifyBtn.addActionListener(onModifyBtnClick);
+			return modifyBtn;
 		}
 		return new JLabel("...");
 	}
@@ -110,8 +151,5 @@ public class DetailsPanel extends JPanel {
 		}
 		return new JLabel("...");
 	}
-	
-	
-	
 	
 }

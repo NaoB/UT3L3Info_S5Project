@@ -28,27 +28,9 @@ public class ManagementPanel extends JSplitPane {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		
 		createTree();
+		this.add(tree);
 		createDetails();
-		
-		ActionListener action = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				/**
-				 * Repaint() ça permet de mettre à jour le tree, mais les détails sont pas mis à jour,
-				 * il faut mettre les getChild en cache sinon c'est la merde (et éventuellement invalider le cache
-				 * dans la fonction ici)
-				 * faut trouver un moyent de mettre à jour les détails (peut-etre refaire un get du capteur)
-				 * sinon c'est pas mal, bon courage !
-				 */
-				((SensorTreeModel) tree.getModel()).clearCache();
-				repaint();
-				revalidate();
-				System.out.println("UI updated");
-			}
-		};
-		
-		Timer timer = new Timer(delay, action);
-		timer.start();
+		this.add(details);
 	}
 	
 	private void createTree() {
@@ -61,18 +43,21 @@ public class ManagementPanel extends JSplitPane {
 				treeOnSelection(tree.getLastSelectedPathComponent());
 			}
 		});
-		this.add(tree);
 	}
 	
 	private void createDetails() {
 		// Panneau des details
 		details = new DetailsPanel();
-		this.add(details);
 	}
 	
 	private void treeOnSelection(Object node) {
 		if (node instanceof Sensor) {
 			details.setSensor((Sensor) node);
 		}
+	}
+	
+	private void refreshTree() {
+		this.remove(tree);
+		createTree();
 	}
 }

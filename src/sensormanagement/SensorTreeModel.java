@@ -59,13 +59,7 @@ class SensorTreeModel implements TreeModel {
 	public SensorTreeModel() {
 		loadDatas();
 	}
-	
-	public void clearCache() {
-		buildingsCache = new ArrayList<>();
-		floorsCache = new HashMap<>();
-		sensorsCache = new HashMap<>();
-	}
-	
+		
 	public void loadDatas() {
 		System.out.println("Loading tree datas from DB...");
 		buildingsCache = Building.fetchAll();
