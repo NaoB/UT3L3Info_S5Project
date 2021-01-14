@@ -1,5 +1,7 @@
 package sensormanagement;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import javax.swing.tree.TreePath;
 
 import model.Building;
 import model.Sensor;
+import network.ClientProcessor;
 
 class SensorTreeModel implements TreeModel {
 	
@@ -61,27 +64,32 @@ class SensorTreeModel implements TreeModel {
 	}
 		
 	public void loadDatas() {
-		System.out.println("Loading tree datas from DB...");
-		buildingsCache = Building.fetchAll();
-		
-		for (Building building : buildingsCache) {
-			SortedSet<Floor> floors = new TreeSet<>();
-			for (Sensor sensor : building.getSensors()) {
-				floors.add(new Floor(building, sensor.getFloor()));
-			}
-			ArrayList<Floor> floorsList = new ArrayList<>();
-			floorsList.addAll(floors);
-			floorsCache.put(building, floorsList);
-		}
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				System.out.println("Loading tree datas from DB...");
+				buildingsCache = Building.fetchAll();
+				
+				for (Building building : buildingsCache) {
+					SortedSet<Floor> floors = new TreeSet<>();
+					for (Sensor sensor : building.getSensors()) {
+						floors.add(new Floor(building, sensor.getFloor()));
+					}
+					ArrayList<Floor> floorsList = new ArrayList<>();
+					floorsList.addAll(floors);
+					floorsCache.put(building, floorsList);
+				}
 
-		for (List<Floor> floorsList : floorsCache.values()) {
-			for (Floor floor : floorsList) {
-				Map<String, String> search = new HashMap<>();
-				search.put("building", floor.getBuilding().getName());
-				search.put("floor", floor.getFloor().toString());
-				sensorsCache.put(floor, Sensor.search(search));
+				for (List<Floor> floorsList : floorsCache.values()) {
+					for (Floor floor : floorsList) {
+						Map<String, String> search = new HashMap<>();
+						search.put("building", floor.getBuilding().getName());
+						search.put("floor", floor.getFloor().toString());
+						sensorsCache.put(floor, Sensor.search(search));
+					}
+				}
 			}
-		}
+		});
+		t.start();
 	}
 
 	@Override
