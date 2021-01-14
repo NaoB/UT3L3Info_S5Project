@@ -49,7 +49,7 @@ public class Sensor extends Model {
 	private static Sensor fromResultSet(ResultSet rs) throws SQLException {
 		String name = rs.getString("name");
 		SensorType sensorType = SensorType.find(rs.getString("sensor_type")).get(0);
-		Building building = Building.find(rs.getString("building")).get(0);
+		Building building = new Building(rs.getString("building")); //  Building.find(rs.getString("building")).get(0);
 		int floor = rs.getInt("floor");
 		String location = rs.getString("location");
 		boolean connected = rs.getBoolean("connected");

@@ -48,12 +48,16 @@ public class DetailsPanel extends JPanel {
 			    dialogPanel.add(maxTxt);
 			    int result = JOptionPane.showConfirmDialog(that, dialogPanel, "Entrez les bornes pour les valeurs du capteur", JOptionPane.OK_CANCEL_OPTION);
 			    if (result == JOptionPane.OK_OPTION) {
-			    	float min = Float.valueOf(minTxt.getText());
-			    	float max = Float.valueOf(maxTxt.getText());
-			    	sensor.setMin(min);
-			    	sensor.setMax(max);
-			    	sensor.save();
-			    	JOptionPane.showMessageDialog(that, "Les bornes du capteur ont été modifiées");
+			    	try {
+			    		float min = Float.valueOf(minTxt.getText());
+				    	float max = Float.valueOf(maxTxt.getText());
+				    	sensor.setMin(min);
+				    	sensor.setMax(max);
+				    	sensor.save();
+				    	JOptionPane.showMessageDialog(that, "Les bornes du capteur ont été modifiées");
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(that, "ERREUR : Les valeurs entrées sont invalides", "Erreur", JOptionPane.ERROR_MESSAGE);
+					}
 			    }
 			}
 		};

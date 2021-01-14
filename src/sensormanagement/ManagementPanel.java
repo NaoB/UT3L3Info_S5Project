@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
@@ -23,6 +24,7 @@ public class ManagementPanel extends JSplitPane {
 	private JTree tree;
 	private DetailsPanel details;
 	private JPanel treeContainer;
+	private JScrollPane treeView;
 	
 	public ManagementPanel() {
 		super(JSplitPane.HORIZONTAL_SPLIT);
@@ -40,8 +42,9 @@ public class ManagementPanel extends JSplitPane {
 		treeContainer.setBorder(new EmptyBorder(5, 5, 5, 5));
 		JButton refreshButton = new JButton("Rafraichir");
 		refreshButton.addActionListener(onRefreshClick);
-		treeContainer.add(tree, BorderLayout.PAGE_START);
-		treeContainer.add(refreshButton, BorderLayout.PAGE_END);
+		treeView = new JScrollPane(tree);
+		treeContainer.add(treeView, BorderLayout.PAGE_END);
+		treeContainer.add(refreshButton, BorderLayout.PAGE_START);
 		this.add(treeContainer);
 		createDetails();
 		this.add(details);
@@ -73,9 +76,10 @@ public class ManagementPanel extends JSplitPane {
 	}
 	
 	private void refreshTree() {
-		treeContainer.remove(tree);
+		treeContainer.remove(treeView);
 		createTree();
-		treeContainer.add(tree, BorderLayout.PAGE_START);
+		treeView = new JScrollPane(tree);
+		treeContainer.add(treeView);
 		revalidate();
 		repaint();
 	}
