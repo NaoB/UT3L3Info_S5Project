@@ -2,6 +2,7 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import graphic.GraphicPanel;
 import realtime.RealTimePanel;
@@ -28,7 +29,7 @@ public class Project extends JFrame {
 		
 		// Creation, parametrage et positionnement des composants
 		// Panel pour les deux blocs a gauche (Temps Reel et Gestion)
-		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new RealTimePanel(), new ManagementPanel());
+		JSplitPane splitHorizontal = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(new RealTimePanel()), new ManagementPanel());
 		
 		// Visualisation a posteriori	
 
