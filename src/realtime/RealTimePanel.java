@@ -32,13 +32,13 @@ public class RealTimePanel extends JPanel {
 	private Set<Integer> alerts = new HashSet<>();
 	private DataModel dataModel;
 	private final String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
-	private String[] buildings;
+	private List<String> buildings;
 	JRadioButton bat = new JRadioButton("Batiment",true);
 	JRadioButton fluide = new JRadioButton("Fluide",false);
 	TableRowSorter<DataModel> sorter;   
 
 	public RealTimePanel() {
-		RealTimeController c = new RealTimeController(this);
+
 		JPanel main = new JPanel();
 		main.setLayout(new BorderLayout());
 		this.add(main);
@@ -59,14 +59,12 @@ public class RealTimePanel extends JPanel {
 
 		selecteur.add(labels, BorderLayout.NORTH);
 		dataFilter = new JComboBox<>();
-		dataFilter.addActionListener(c);
 
 		selecteur.add(dataFilter,BorderLayout.WEST);
 		ButtonGroup typeFilter = new ButtonGroup();
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(2,1));
-		bat.addActionListener(c);
-		fluide.addActionListener(c);
+
 		bat.setEnabled(false);
 		fluide.setEnabled(true);
 		typeFilter.add(bat);
@@ -85,11 +83,6 @@ public class RealTimePanel extends JPanel {
 		 for (int i = 0; i < 6; i++) {
 		     dataTable.getColumnModel().getColumn(i).setCellRenderer(renderer);
 		 }
-		SensorType EAU = new SensorType("EAU", "m3", 1, 10);
-		Building bat1 = new Building("Batiment 1");
-		updateBuildings(new String[] {bat1.getName()});
-
-		afficherDonnees(new Sensor[] {new Sensor("Capteur 1", EAU, bat1, 1, "Salle201"),new Sensor("Capteur 2", EAU, bat1, 1, "Salle201"),new Sensor("Capteur 3", EAU, bat1, 1, "Salle201")});
 
 		JScrollPane scrollPane= new  JScrollPane(dataTable);
 		main.add(scrollPane,BorderLayout.CENTER);
@@ -99,15 +92,18 @@ public class RealTimePanel extends JPanel {
 		for (int i = 0; i < 6; i++) {
 			sorter.setSortable(i, false);
 		}
-		toggleFilter();
+		RealTimeController c = new RealTimeController(this);
+		dataFilter.addActionListener(c);
+		bat.addActionListener(c);
+		fluide.addActionListener(c);
 	}
 
 
 	public void toggleFilter() {
 		dataFilter.removeAllItems();
 		if(bat.isSelected()) {
-			for (int i = 0; i < buildings.length; i++) {
-				dataFilter.addItem(buildings[i]);
+			for (int i = 0; i < buildings.size(); i++) {
+				dataFilter.addItem(buildings.get(i));
 			}
 			bat.setEnabled(false);
 			fluide.setEnabled(true);
@@ -124,12 +120,12 @@ public class RealTimePanel extends JPanel {
 	}
 
 
-	public void updateBuildings(String[] buildings) {
+	public void updateBuildings(List<String> buildings) {
 		this.buildings=buildings;
 	}
 
 
-	public void afficherDonnees(Sensor[] sensors) {
+	public void afficherDonnees(List<Sensor> sensors) {
 		alerts=dataModel.updateData(sensors);
 		toggleAlert();
 	}
@@ -147,9 +143,9 @@ public class RealTimePanel extends JPanel {
 			alertLabel.setText(alert);
 			alertLabel.setForeground(Color.red);
 			alertLabel.setFont(new Font("Verdana",Font.BOLD,20));
-			dataModel.setColorRow(alerts);
-		}
 
+		}
+		dataModel.setColorRow(alerts);
 	}
 	
 	public void filter() {
@@ -178,18 +174,19 @@ public class RealTimePanel extends JPanel {
 		}
 
 
-		public Set<Integer> updateData(Sensor[] sensors) {
+		public Set<Integer> updateData(List<Sensor> sensors) {
 			Set<Integer> alerts = new HashSet<>();
-			for (int i = 0; i < sensors.length; i++) {
-				if(!(data.contains(sensors[i])))
-					data.add(sensors[i]);
-				if(sensors[i].getValue()<sensors[i].getMin()||sensors[i].getValue()>sensors[i].getMax())
+			for (int i = 0; i < sensors.size(); i++) {
+				Sensor tmp = sensors.get(i);
+				if(!(data.contains(tmp)))
+					data.add(tmp);
+				if(tmp.getValue()<tmp.getMin()||tmp.getValue()>tmp.getMax())
 					alerts.add(i);
 				else
 					alerts.remove(i);
 			}
-			fireTableDataChanged();
 			n=data.size();
+			fireTableDataChanged();
 			return alerts;
 		}
 		
