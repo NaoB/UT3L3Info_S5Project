@@ -1,7 +1,8 @@
 # L3 Info : Projet S5 (ALLET, AUZI, BELLAVIA)
 
 ## Création de la base de données
-La base de données peut être importée à partir du fichier `bdd.sql`
+La base de données peut être importée à partir du fichier `bdd.sql` (avec des données déjà présentes) ou `bdd_vide.sql` (contenant uniquement la structure et les valeurs par défaut pour les différents types de capteurs)
+
 Les informations de connexion à la base de données peuvent être modifiées dans le fichier `model.Database.java` aux lignes 11-14 :
 ```java
 private String dbHost = "xxx.xxx.xxx.xxx"; // IP de la base de données
