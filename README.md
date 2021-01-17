@@ -3,7 +3,8 @@
 ## Création de la base de données
 La base de données peut être importée à partir du fichier `bdd.sql` (avec des données déjà présentes) ou `bdd_vide.sql` (contenant uniquement la structure et les valeurs par défaut pour les différents types de capteurs)
 
-Les informations de connexion à la base de données peuvent être modifiées dans le fichier `model.Database.java` aux lignes 11-14 :
+Par défault l'application accède une base de données sur un serveur.
+Les informations de connexion à la base de données peuvent être modifiées dans le fichier `model.Database.java` aux lignes 11-14 (par exemple pour utiliser Wamp):
 ```java
 private String dbHost = "xxx.xxx.xxx.xxx"; // IP de la base de données
 private String dbName = "project"; // Nom de la base de données
