@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -25,11 +26,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud.DataModel;
+
 public class RealTimePanel extends JPanel {
 	private JComboBox<String> dataFilter;
 	private JTable dataTable;
 	private JLabel alertLabel=new JLabel("",SwingConstants.CENTER);
 	private Set<Integer> alerts = new HashSet<>();
+	private List<Sensor> sensors= new ArrayList<>();
 	private DataModel dataModel;
 	private final String[] fluids = {"EAU","ELECTRICITE","TEMPERATURE","AIR COMPRIME"};
 	private List<String> buildings;
@@ -127,6 +131,7 @@ public class RealTimePanel extends JPanel {
 
 	public void afficherDonnees(List<Sensor> sensors) {
 		alerts=dataModel.updateData(sensors);
+		this.sensors = sensors;
 		toggleAlert();
 	}
 
@@ -137,9 +142,17 @@ public class RealTimePanel extends JPanel {
 		else {
 			String alert = "ATTENTION";
 			if(alerts.size() > 1)
-				alert += " LES CAPTEURS "+alerts.toString()+" ONT DES VALEURS ANORMALES";
+				alert += " LES CAPTEURS ";
 			else
-				alert+= " LE CAPTEUR" + alerts.toString()+" A UNE VALEUR ANORMALE";
+				alert+= " LE CAPTEUR ";
+			for (Iterator<Integer> iterator = alerts.iterator(); iterator.hasNext();) {
+				Integer i = iterator.next();
+				alert+=sensors.get(i).getName()+" ";
+			}
+			if(alerts.size() > 1)
+				alert+=" ONT DES VALEURS ANORMALES";
+			else
+				alert+=" A UNE VALEUR ANORMALE";
 			alertLabel.setText(alert);
 			alertLabel.setForeground(Color.red);
 			alertLabel.setFont(new Font("Verdana",Font.BOLD,20));
@@ -149,10 +162,12 @@ public class RealTimePanel extends JPanel {
 	}
 	
 	public void filter() {
-		if(bat.isSelected())
+		if(bat.isSelected()) {
 			sorter.setRowFilter(RowFilter.regexFilter(dataFilter.getSelectedItem().toString(), 2));
-		else
+		}
+		else {
 			sorter.setRowFilter(RowFilter.regexFilter(dataFilter.getSelectedItem().toString(), 1));
+		}
 	}
 
 
@@ -176,6 +191,7 @@ public class RealTimePanel extends JPanel {
 
 		public Set<Integer> updateData(List<Sensor> sensors) {
 			Set<Integer> alerts = new HashSet<>();
+			data = new ArrayList<>();
 			for (int i = 0; i < sensors.size(); i++) {
 				Sensor tmp = sensors.get(i);
 				if(!(data.contains(tmp)))
