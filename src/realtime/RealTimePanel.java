@@ -188,7 +188,7 @@ public class RealTimePanel extends JPanel {
 			return n;
 		}
 
-
+		//Rajout données dans tableau
 		public Set<Integer> updateData(List<Sensor> sensors) {
 			Set<Integer> alerts = new HashSet<>();
 			data = new ArrayList<>();
